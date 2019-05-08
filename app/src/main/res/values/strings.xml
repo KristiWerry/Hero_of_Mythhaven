@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Hero Of Mythhaven</string>
+    <string name="violet_hawk">Violet Hawk</string>
+    <string name="quests">Quests</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="paused">Paused</string>
+    <string name="resume">Resume</string>
+    <string name="quit">Quit</string>
+    <string name="embark">Embark on Quest</string>
+    <string name="back">Back</string>
+</resources>
