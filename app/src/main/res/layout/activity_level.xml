@@ -7,10 +7,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".LevelActivity">
-    <ImageView android:layout_width="fill_parent"
-               android:layout_height="fill_parent"
-               android:adjustViewBounds="true"
-               android:background="@drawable/dark_dungeon"/>
+
+    <view android:layout_width="match_parent" android:layout_height="match_parent"
+          class="kristi.heroofmythhaven.GameView" android:id="@+id/gameView"/>
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -99,6 +98,7 @@
                            android:id="@+id/jumpButton"
                            android:layout_weight="1"/>
             </LinearLayout>
+
 
         </RelativeLayout>
 

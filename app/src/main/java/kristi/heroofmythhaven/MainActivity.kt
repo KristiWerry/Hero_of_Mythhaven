@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(startQuest1)
         }
     }
-    /*private fun showQuestPopup() {
+    /*fun showQuestPopup(view: View) {
         var dialogs = Dialog(this)
         dialogs.setCancelable(false)
         dialogs.setContentView(R.layout.pause_popup)
