@@ -1,15 +1,9 @@
 package kristi.heroofmythhaven
 
-import android.app.Activity
-import android.content.Context
-import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Point
 import android.graphics.PointF
-import android.graphics.drawable.Drawable
 import android.util.Log
-import java.util.logging.Level
 
 class GameManager{
 
@@ -19,13 +13,14 @@ class GameManager{
     //      - Should have a n update function that updates all of the objects
     //      -
     // Step 2(FUTURE): Collision/ Jumping / Game management
-    private lateinit var gameObjects: MutableList<DrawObjects>
+    private lateinit var gameObjects: MutableList<GameObject>
     private val context: LevelActivity
     private var loaded = false
     private var playerLocation = PointF()
     private var middlePoint = PointF()
     private lateinit var player: Player
     private lateinit var background: Background
+    private var players = ArrayList<Bitmap>(4)
 
     constructor(level: Int, context: LevelActivity) {
         this.context = context
@@ -34,16 +29,21 @@ class GameManager{
     // Based on what level is inputted, go to a JSON file and grab the necessary information
     fun loadGameObject(){
             if (!loaded) {
-                Log.i("HOM", "Load Game Objects")
-                val bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
-                    R.drawable.death_knight), 200, 200, false)
+                players.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
+                    R.drawable.death_knight), 200, 200, false))
+                players.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
+                    R.drawable.death_knight2), 200, 200, false))
+                players.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
+                    R.drawable.death_knight3), 200, 200, false))
+                players.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
+                    R.drawable.death_knight4), 200, 200, false))
                 val gameView = context.findViewById<GameView>(R.id.gameView)
-                middlePoint.x = gameView.width * 0.5f - (bitmap.width/2)
+                middlePoint.x = gameView.width * 0.5f - (players[0].width/2)
                 middlePoint.y = gameView.height * 0.59f
 
-                playerLocation.x = middlePoint.x
+                playerLocation.x = middlePoint.x - 500
                 playerLocation.y = middlePoint.y
-                player = Player(bitmap, playerLocation)
+                player = Player(players, playerLocation)
 
                 val backgroundBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
                     R.drawable.level1_background), gameView.width+5, gameView.height, false)
@@ -51,23 +51,37 @@ class GameManager{
                     PointF(gameView.width.toFloat(), gameView.height.toFloat()))
 
                 val chest = Chest(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
-                    R.drawable.chest), 200, 200, false), PointF(4*gameView.width.toFloat(), gameView.height.toFloat()* 0.59f))
+                    R.drawable.chest), 100, 100, false), PointF(4*gameView.width.toFloat(),
+                    gameView.height.toFloat()* 0.69f))
+
+                val landing = Landing(BitmapFactory.decodeResource(context.resources,
+                    R.drawable.landing1), PointF(gameView.width.toFloat()/2+500,gameView.height * 0.65f) )
 
                 loaded = true
-                gameObjects = mutableListOf(background, player, chest)
+                gameObjects = mutableListOf(background, player, chest, landing)
             }
     }
 
     fun update(userInput: UserInput) {
         player.getLocation(playerLocation)
+        player.collisions[0] = false
+        player.collisions[1] = false
+        player.collisions[2] = false
+        player.collisions[3] = false
+        player.collisions[4] = false
+
         for (gameObj in gameObjects) {
-            gameObj.update(userInput, playerLocation, middlePoint.x)
+            if (gameObj != player) {
+                gameObj.collision(player)
+            }
         }
 
-        Log.i("HOM", "NUMBER OF BGS: " + background.numCompletedBackgrounds)
+        for (gameObj in gameObjects) {
+            gameObj.update(userInput,  player.collisions)
+        }
     }
 
-    fun getGameObjects(): List<DrawObjects> {
+    fun getGameObjects(): List<GameObject> {
         return gameObjects
     }
 }

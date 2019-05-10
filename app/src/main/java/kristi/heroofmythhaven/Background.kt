@@ -1,11 +1,13 @@
 package kristi.heroofmythhaven
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Point
-import android.graphics.PointF
+import android.graphics.*
+import android.util.Log
+import kotlin.math.abs
 
-class Background: DrawObjects {
+class Background: GameObject {
+    override var boundingBox: Rect = Rect(0,0,0,0) // Not used
+    override var collisions: Array<Boolean> = arrayOf(false, false, false, false)
+
     private var background1: Bitmap
     private var bLocation1: PointF
     private var bLocation2: PointF
@@ -21,6 +23,7 @@ class Background: DrawObjects {
         this.screenSize = screenSize
         bLocation1 = PointF(0f,0f)
         bLocation2 = PointF(screenSize.x, 0f)
+        boundingBox = Rect((screenSize.x/2).toInt(), 0, screenSize.x.toInt(), screenSize.y.toInt())
     }
 
     override fun draw(canvas: Canvas) {
@@ -28,7 +31,7 @@ class Background: DrawObjects {
         canvas.drawBitmap(background2, bLocation2.x, bLocation2.y, null)
     }
 
-    override fun update(userInput: UserInput, location: PointF, isMiddle: Float) {
+    override fun update(userInput: UserInput, directions: Array<Boolean>) {
         if (bLocation1.x < 0f-screenSize.x) {
             bLocation1.x = screenSize.x
             numCompletedBackgrounds++
@@ -37,9 +40,47 @@ class Background: DrawObjects {
             bLocation2.x = screenSize.x
             numCompletedBackgrounds++
         }
-        if ((location.x >= isMiddle) && userInput==UserInput.RIGHT) {
+        if (userInput == UserInput.RIGHT && directions[4] && !directions[2]) {
             bLocation1.x -= 5
             bLocation2.x -= 5
+        }
+
+    }
+
+    override fun trajectory(point: PointF, time: Float){
+
+    }
+
+    override fun collision(pObj: Physics){
+        if (boundingBox.intersect(pObj.boundingBox)){
+            val w = 0.5 * (boundingBox.width() + pObj.boundingBox.width()) // Average width
+            val h = 0.5 * (boundingBox.height() + pObj.boundingBox.height()) // Average height
+            val dx = boundingBox.centerX() - pObj.boundingBox.centerX() // difference of centers
+            val dy = boundingBox.centerY() - pObj.boundingBox.centerY()
+
+            if (abs(dx) <= w && abs(dy) <= h) {
+                val wy = w * dy
+                val hx = h * dx
+
+                if (wy > hx) {
+                    if (wy > -hx) {
+                        pObj.collisions[1] = true // UP
+                    }
+                    else {
+                        pObj.collisions[0] = true // LEFT
+                    }
+                }
+                else {
+                    if (wy > -hx) {
+                        pObj.collisions[4] = true // RIGHT
+                    }
+                    else {
+                        pObj.collisions[3] = true // DOWN
+                    }
+
+                }
+
+            }
         }
     }
 }

@@ -3,8 +3,11 @@ package kristi.heroofmythhaven
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.PointF
+import android.graphics.Rect
 
-class Chest: DrawObjects{
+class Chest: GameObject{
+    override var boundingBox: Rect = Rect(0,0,0,0)
+    override var collisions: Array<Boolean> = arrayOf(false, false, false, false)
 
     private var chest: Bitmap
     private var xCoor: Float
@@ -20,9 +23,17 @@ class Chest: DrawObjects{
         canvas.drawBitmap(chest, xCoor, yCoor, null)
     }
 
-    override fun update(userInput: UserInput, location: PointF, isMiddle: Float) {
-        if ((location.x >= isMiddle) && userInput==UserInput.RIGHT) {
+    override fun update(userInput: UserInput, directions: Array<Boolean>) {
+        if (directions[4] && userInput==UserInput.RIGHT) {
             xCoor -= 5
         }
+    }
+
+    override fun trajectory(point: PointF, time: Float){
+
+    }
+
+    override fun collision(pObj: Physics) {
+
     }
 }
