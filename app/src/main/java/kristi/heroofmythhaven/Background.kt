@@ -5,7 +5,8 @@ import android.util.Log
 import kotlin.math.abs
 
 class Background: GameObject {
-    override var boundingBox: Rect = Rect(0,0,0,0) // Not used
+    override var boundingBox: Rect
+    private var floorBoundingBox: Rect
     override var collisions: Array<Boolean> = arrayOf(false, false, false, false)
 
     private var background1: Bitmap
@@ -24,11 +25,14 @@ class Background: GameObject {
         bLocation1 = PointF(0f,0f)
         bLocation2 = PointF(screenSize.x, 0f)
         boundingBox = Rect((screenSize.x/2).toInt(), 0, screenSize.x.toInt(), screenSize.y.toInt())
+        floorBoundingBox = Rect(0, (screenSize.y * 0.79f).toInt(), screenSize.x.toInt(), screenSize.y.toInt()) //left, top, right, bottom
     }
 
     override fun draw(canvas: Canvas) {
         canvas.drawBitmap(background1, bLocation1.x, bLocation1.y, null)
         canvas.drawBitmap(background2, bLocation2.x, bLocation2.y, null)
+        canvas.drawRect(floorBoundingBox, Paint(Color.RED))
+        canvas.drawRect(boundingBox, Paint(Color.RED))
     }
 
     override fun update(userInput: UserInput, directions: Array<Boolean>) {
@@ -52,11 +56,16 @@ class Background: GameObject {
     }
 
     override fun collision(pObj: Physics){
-        if (boundingBox.intersect(pObj.boundingBox)){
-            val w = 0.5 * (boundingBox.width() + pObj.boundingBox.width()) // Average width
-            val h = 0.5 * (boundingBox.height() + pObj.boundingBox.height()) // Average height
-            val dx = boundingBox.centerX() - pObj.boundingBox.centerX() // difference of centers
-            val dy = boundingBox.centerY() - pObj.boundingBox.centerY()
+        detectCollisions(pObj, boundingBox)
+        detectCollisions(pObj, floorBoundingBox)
+    }
+
+    private fun detectCollisions(pObj: Physics, bBox: Rect) {
+        if (bBox.intersect(pObj.boundingBox)){
+            val w = 0.5 * (bBox.width() + pObj.boundingBox.width()) // Average width
+            val h = 0.5 * (bBox.height() + pObj.boundingBox.height()) // Average height
+            val dx = bBox.centerX() - pObj.boundingBox.centerX() // difference of centers
+            val dy = bBox.centerY() - pObj.boundingBox.centerY()
 
             if (abs(dx) <= w && abs(dy) <= h) {
                 val wy = w * dy
@@ -65,6 +74,7 @@ class Background: GameObject {
                 if (wy > hx) {
                     if (wy > -hx) {
                         pObj.collisions[1] = true // UP
+                        //Log.i("HOM","UPPPPPP")
                     }
                     else {
                         pObj.collisions[0] = true // LEFT
@@ -73,13 +83,13 @@ class Background: GameObject {
                 else {
                     if (wy > -hx) {
                         pObj.collisions[4] = true // RIGHT
+                        //Log.i("HOM", "RIGHT")
                     }
                     else {
                         pObj.collisions[3] = true // DOWN
+                        //Log.i("HOM", "DOWN")
                     }
-
                 }
-
             }
         }
     }
