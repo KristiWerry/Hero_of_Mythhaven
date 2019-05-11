@@ -27,6 +27,8 @@ class Background: GameObject {
         bLocation2 = PointF(screenSize.x, 0f)
         boundingBox = Rect((screenSize.x/2).toInt(), 0, screenSize.x.toInt(), screenSize.y.toInt())
         floorBoundingBox = Rect(0, (screenSize.y * 0.79f).toInt(), screenSize.x.toInt(), screenSize.y.toInt()) //left, top, right, bottom
+        Log.i("HOM", "TOP OF FLOOR: " + screenSize.y * 0.79f)
+        Log.i("HOM", "BOTTOM OF FLOOR: " + screenSize.y)
     }
 
     override fun draw(canvas: Canvas) {

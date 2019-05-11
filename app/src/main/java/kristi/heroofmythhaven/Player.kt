@@ -2,6 +2,7 @@ package kristi.heroofmythhaven
 
 import android.graphics.*
 import android.util.Log
+import java.nio.file.Files.move
 import kotlin.collections.ArrayList
 
 class Player: GameObject{
@@ -14,9 +15,10 @@ class Player: GameObject{
     private var isJumping = false
     private var velocityY = -5f
     private var mTime = 0f
-    private val velocityX = 5f
-    private val gravity = 9f
+    private var velocityX = 3f
+    private var gravity = 9f
     private val time = 0.5f
+    private var canJump = 0
 
     constructor(mBitmap: ArrayList<Bitmap>, startingPoint: PointF) {
         player = mBitmap
@@ -34,13 +36,27 @@ class Player: GameObject{
 
     // Ignore input location because the player already has this information
     override fun update(userInput: UserInput, directions: Array<Boolean>) {
-
         if(!directions[0] && !directions[1] && !directions[2] && !directions[3]) { // No Collisions
+            resetGravity()
             if(isJumping){
                 if (directions[4]) {
-                    playerLocation.y += gravity
+                    velocityX = 0f
+                    trajectory(playerLocation, time)
                 }
                 else{
+                    if (playerLocation.x >= 0) {
+                        when (userInput) {
+                            UserInput.RIGHT -> {
+                                resetVelocity()
+                            }
+                            UserInput.LEFT -> {
+                                velocityX = -5f
+                            }
+                            UserInput.NOINPUT -> {
+                                velocityX = 0f
+                            }
+                        }
+                    }
                     trajectory(playerLocation,time)
                 }
             }
@@ -49,50 +65,51 @@ class Player: GameObject{
 
                 when (userInput) {
                     UserInput.NOINPUT -> {
-                        playerLocation.y += gravity
+                        velocityX = 0f
+                        move()
                     }
                     UserInput.JUMP -> { //can't happen
                         // DO NOTHING
                     }
                     UserInput.RIGHT -> {
                         if (directions[4]) {
-                            playerLocation.y += gravity
+                            velocityX = 0f
+                            move()
                         } else {
-                            playerLocation.x += velocityX
-                            playerLocation.y += gravity
+                            resetVelocity()
+                            move()
                         }
                     }
                     UserInput.LEFT -> {
-                        if (playerLocation.x >= 0) {
-                            playerLocation.x -= velocityX
-                        }
-                        playerLocation.y += gravity
+                        velocityX = -5f
+                        move()
                     }
                 }
             }
         }
         else if(!directions[0] && directions[1] && !directions[2] && !directions[3]) { // TOP
+            resetGravity()
             when(userInput) {
                 UserInput.NOINPUT -> {
-                    playerLocation.y += gravity
+                    velocityX = 0f
+                    move()
                 }
                 UserInput.JUMP -> { //can't happen
                     // DO NOTHING
                 }
                 UserInput.RIGHT -> {
                     if (directions[4]) {
-                        playerLocation.y += gravity
+                        velocityX = 0f
+                        move()
                     }
                     else {
-                        playerLocation.x += velocityX
-                        playerLocation.y += gravity
+                        resetVelocity()
+                        move()
                     }
                 }
                 UserInput.LEFT -> {
-                    if (playerLocation.x >= 0) {
-                        playerLocation.x -= velocityX
-                    }
-                    playerLocation.y += gravity
+                    velocityX = -5f
+                    move()
                 }
             }
             mTime = 0f
@@ -101,75 +118,72 @@ class Player: GameObject{
         else if(!directions[0] && !directions[1] && !directions[2] && directions[3]) { // BOTTOM
             mTime = 0f
             isJumping = false
+            gravity = 0f
             when(userInput) {
                 UserInput.NOINPUT -> {
                     // DO NOTHING
                 }
                 UserInput.JUMP -> {
+                    velocityX = 0f
                     trajectory(playerLocation, time)
                     isJumping = true
                 }
                 UserInput.RIGHT -> {
                     if (!directions[4]) {
-                        playerLocation.x += velocityX
+                        resetVelocity()
+                        move()
                     }
                 }
                 UserInput.LEFT -> {
-                    if (playerLocation.x >= 0) {
-                        playerLocation.x -= velocityX
-                    }
+                    velocityX = -5f
+                    move()
                 }
             }
         }
         else if(!directions[0] && !directions[1] && directions[2] && !directions[3]) { // RIGHT
+            resetGravity()
             when(userInput) {
                 UserInput.NOINPUT -> {
-                    playerLocation.y += gravity
+                    velocityX = 0f
+                    move()
                 }
                 UserInput.JUMP -> { //can't happen
                     // DO NOTHING
                 }
                 UserInput.RIGHT -> {
-                    if (directions[4]) {
-                        playerLocation.y += gravity
-                    }
-                    else {
-                        playerLocation.x += velocityX
-                        playerLocation.y += gravity
-                    }
+                        velocityX = 0f
+                        move()
                 }
                 UserInput.LEFT -> {
-                    if (playerLocation.x >= 0) {
-                        playerLocation.x -= velocityX
-                    }
-                    playerLocation.y += gravity
+                    velocityX = -5f
+                    move()
                 }
             }
             mTime = 0f
             isJumping = false
         }
         else if(directions[0] && !directions[1] && !directions[2] && !directions[3]) { //LEFT
+            resetGravity()
             when(userInput) {
                 UserInput.NOINPUT -> {
-                    playerLocation.y += gravity
+                    velocityX = 0f
                 }
                 UserInput.JUMP -> { //can't happen
-                    // DO NOTHING
+
                 }
                 UserInput.RIGHT -> {
                     if (directions[4]) {
-                        playerLocation.y += gravity
+                        velocityX = 0f
+                        move()
                     }
                     else {
-                        playerLocation.x += velocityX
-                        playerLocation.y += gravity
+                        resetVelocity()
+                        move()
                     }
                 }
                 UserInput.LEFT -> {
-                    if (playerLocation.x >= 0) {
-                        playerLocation.x -= velocityX
-                    }
-                    playerLocation.y += gravity
+                    velocityX = -5f
+                    move()
                 }
             }
             mTime = 0f
@@ -178,19 +192,21 @@ class Player: GameObject{
         else if(!directions[0] && !directions[1] && directions[2] && directions[3]) { // BOTTOM RIGHT
             when(userInput) {
                 UserInput.NOINPUT -> {
-                    // Do NOTHING
+                    gravity = 0f
                 }
                 UserInput.JUMP -> {
+                    resetGravity()
+                    velocityX = 0f
                     trajectory(playerLocation, time)
                     isJumping = true
                 }
                 UserInput.RIGHT -> {
-                    // DO NOTHING
+                    gravity = 0f
                 }
                 UserInput.LEFT -> {
-                    if (playerLocation.x >= 0) {
-                        playerLocation.x -= velocityX
-                    }
+                    velocityX = -5f
+                    gravity = 0f
+                    move()
                 }
             }
             mTime = 0f
@@ -199,65 +215,75 @@ class Player: GameObject{
         else if(directions[0] && !directions[1] && directions[2] && !directions[3]) { // BOTTOM LEFT
             when(userInput) {
                 UserInput.NOINPUT -> {
-                    // Do NOTHING
+                    gravity = 0f
                 }
                 UserInput.JUMP -> {
+                    resetGravity()
+                    velocityX = 0f
                     trajectory(playerLocation, time)
                     isJumping = true
                 }
                 UserInput.RIGHT -> {
+                    gravity = 0f
                     if (!directions[4]) {
-                        playerLocation.x += velocityX
+                        resetVelocity()
+                        move()
                     }
                 }
                 UserInput.LEFT -> {
-                    // DO NOTHING
+                    gravity = 0f
+                    velocityX = 0f
                 }
             }
             mTime = 0f
             isJumping = false
         }
         else if(!directions[0] && directions[1] && directions[2] && !directions[3]) { // TOP RIGHT
+            resetGravity()
             when(userInput) {
                 UserInput.NOINPUT -> {
-                    playerLocation.y += gravity
+                    velocityX = 0f
+                    resetGravity()
+                    move()
                 }
                 UserInput.JUMP -> { //can't happen
                     // DO NOTHING
                 }
                 UserInput.RIGHT -> {
-                    playerLocation.x += velocityX
-                    playerLocation.y += gravity
+                    velocityX = 0f
+                    move()
                 }
                 UserInput.LEFT -> {
-                    if (playerLocation.x >= 0) {
-                        playerLocation.x -= velocityX
-                    }
-                    playerLocation.y += gravity
+                    velocityX = -5f
+                    move()
                 }
             }
             mTime = 0f
             isJumping = false
         }
         else if(directions[0] && directions[1] && !directions[2] && !directions[3]) { // TOP LEFT
+            resetGravity()
             when(userInput) {
                 UserInput.NOINPUT -> {
-                    playerLocation.y += gravity
+                    velocityX = 0f
+                    move()
                 }
                 UserInput.JUMP -> { //can't happen
                     // DO NOTHING
                 }
                 UserInput.RIGHT -> {
                     if (directions[4]) {
-                        playerLocation.y += gravity
+                        velocityX = 0f
+                        move()
                     }
                     else {
-                        playerLocation.x += velocityX
-                        playerLocation.y += gravity
+                        velocityX = 5f
+                        move()
                     }
                 }
                 UserInput.LEFT -> {
-                    playerLocation.y += gravity
+                    velocityX = 0f
+                    move()
                 }
             }
             mTime = 0f
@@ -266,7 +292,10 @@ class Player: GameObject{
         else {
             //mTime = 0f
         }
-
+//        val temp = 803.43f - player[0].height - 10
+//        if (playerLocation.y >= temp) {
+//            playerLocation.y = temp
+//        }
         //Log.i("HOM", "Jump Coor: "+playerLocation.y)
         boundingBox.left = playerLocation.x.toInt()
         boundingBox.right = (playerLocation.x + player[0].width).toInt()
@@ -279,14 +308,61 @@ class Player: GameObject{
         point.y = playerLocation.y
     }
 
+    private fun resetVelocity() {
+        velocityX = 5f
+    }
+    private fun resetGravity() {
+        gravity = 5f
+    }
+
+
+    private fun move() {
+        val temp = 803.43f - player[0].height
+        playerLocation.x += velocityX
+        if (playerLocation.x <= 0) {
+            playerLocation.x = 1f
+        }
+
+        playerLocation.y += gravity
+//        if (playerLocation.y >= temp) {
+//            playerLocation.y = temp
+//        }
+
+//        if (playerLocation.y >= temp) {
+
+//        }
+//        else {
+//            playerLocation.y = temp
+//        }
+    }
+
     override fun collision(pObj: Physics){
 
     }
 
     override fun trajectory(point: PointF, time: Float){
         // x(t) = x0 + v0 * t + 0.5g * t^2
-        mTime += time
-        point.x += (velocityX * (mTime))
-        point.y -= (20f * (mTime) - 0.5f*gravity*mTime*mTime)
+        if (canJump == 1) {
+            canJump = 0
+            val temp = 803.43f - player[0].height + 1
+            mTime += time
+            point.x += (velocityX * (mTime))
+            if (point.x <= 0) {
+                point.x = 1f
+            }
+
+//        if (playerLocation.y >= temp) {
+            point.y -= (18f * (mTime) - 0.5f * gravity * mTime * mTime)
+//        }
+//        else {
+//            playerLocation.y = temp
+//        }
+            if (point.y >= temp) {
+                point.y = temp
+            }
+        }
+        else {
+            canJump++
+        }
     }
 }
