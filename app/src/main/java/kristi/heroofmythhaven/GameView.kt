@@ -25,6 +25,7 @@ class GameView: View{
                 gameObj.draw(canvas)
             }
         }
+        //this.postDelayed({invalidate()}, 100)
         invalidate()
     }
 

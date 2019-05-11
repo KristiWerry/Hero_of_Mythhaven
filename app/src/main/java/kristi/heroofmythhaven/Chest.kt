@@ -6,8 +6,12 @@ import android.graphics.PointF
 import android.graphics.Rect
 
 class Chest: GameObject{
+    override var velocityX: Float = 0f
+    override var velocityY: Float = 0f
+    override var gravity: Float = 0f
+    override var time: Float = 0f
+
     override var boundingBox: Rect = Rect(0,0,0,0)
-    override var collisions: Array<Boolean> = arrayOf(false, false, false, false)
 
     private var chest: Bitmap
     private var xCoor: Float
@@ -23,17 +27,21 @@ class Chest: GameObject{
         canvas.drawBitmap(chest, xCoor, yCoor, null)
     }
 
-    override fun update(userInput: UserInput, directions: Array<Boolean>) {
-        if (directions[4] && userInput==UserInput.RIGHT) {
+    override fun update(context: Boolean) {
+        if (context) {
             xCoor -= 5
         }
     }
 
-    override fun trajectory(point: PointF, time: Float){
+    override fun move(point: PointF) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun trajectory(point: PointF, time: Float){
 
     }
 
-    override fun collision(pObj: Physics) {
-
+    override fun collision(pObj: Physics): Boolean{
+        return false
     }
 }

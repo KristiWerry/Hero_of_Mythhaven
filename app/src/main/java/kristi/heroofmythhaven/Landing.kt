@@ -4,38 +4,40 @@ import android.graphics.*
 import android.util.Log
 import kotlin.math.abs
 
-class Landing:GameObject{
+class Landing: GameObject{
+    // Physics Interface
+    override var velocityX: Float = 5f
+    override var velocityY: Float = 0f
+    override var gravity: Float = 0f
+    override var time: Float = 0.5f
     override var boundingBox: Rect
-    override var collisions: Array<Boolean> = arrayOf(false, false, false, false)
 
     private var landing: Bitmap
-    private var xCoor: Float
-    private var yCoor: Float
+    private var location: PointF
 
     constructor(mBitmap: Bitmap, startingPoint: PointF) {
         landing = mBitmap
-        xCoor = startingPoint.x
-        yCoor = startingPoint.y
-        boundingBox = Rect(xCoor.toInt(), yCoor.toInt(), (xCoor + mBitmap.width).toInt(), (yCoor + mBitmap.height).toInt())
+        location = PointF(startingPoint.x, startingPoint.y)
+        boundingBox = Rect(location.x.toInt(), location.y.toInt(), (location.x + mBitmap.width).toInt(), (location.y + mBitmap.height).toInt())
     }
 
     override fun draw(canvas: Canvas) {
-        canvas.drawBitmap(landing, xCoor, yCoor, null)
+        canvas.drawBitmap(landing, location.x, location.y, null)
     }
 
-    override fun update(userInput: UserInput,  directions: Array<Boolean>) {
-        if (directions[4] && userInput == UserInput.RIGHT && !directions[2]) {
-            xCoor -= 5
-            boundingBox.left = xCoor.toInt()
-            boundingBox.right = (xCoor + landing.width).toInt()
+    override fun update(context: Boolean) {
+        if (context) {
+            move(location)
         }
+        boundingBox.left = location.x.toInt()
+        boundingBox.right = (location.x + landing.width).toInt()
     }
 
-    override fun trajectory(point: PointF, time: Float){
-        // Do Nothings
+    override fun move(point: PointF) {
+        point.x -= velocityX*time
     }
 
-    override fun collision(pObj: Physics){
+    override fun collision(pObj: Physics): Boolean{
         if (Rect.intersects(pObj.boundingBox, boundingBox)){
             val w = 0.5 * (boundingBox.width() + pObj.boundingBox.width())
             val h = 0.5 * (boundingBox.height() + pObj.boundingBox.height())
@@ -47,22 +49,25 @@ class Landing:GameObject{
 
                 if (wy > hx) {
                     if (wy > -hx) {
-                        pObj.collisions[3] = true // DOWN
+                        pObj.velocityY = 1f // DOWN
+                        pObj.gravity = 0f
                     }
                     else {
-                        pObj.collisions[0] = true // LEFT
+                        pObj.velocityX = 1f // LEFT
                     }
                 }
                 else {
                     if (wy > -hx) {
-                        pObj.collisions[2] = true // RIGHT
+                        pObj.velocityX = -1f // RIGHT
                     }
                     else {
-                        pObj.collisions[1] = true // UP
+                        pObj.velocityY = 1f // UP
                     }
 
                 }
             }
+            return true
         }
+        return false
     }
 }
