@@ -3,6 +3,7 @@ package kristi.heroofmythhaven
 import android.graphics.*
 import android.util.Log
 import kotlin.math.abs
+import kotlin.math.floor
 
 class Background: GameObject {
     override var boundingBox: Rect
@@ -32,7 +33,7 @@ class Background: GameObject {
         canvas.drawBitmap(background1, bLocation1.x, bLocation1.y, null)
         canvas.drawBitmap(background2, bLocation2.x, bLocation2.y, null)
         canvas.drawRect(floorBoundingBox, Paint(Color.RED))
-        canvas.drawRect(boundingBox, Paint(Color.RED))
+        //canvas.drawRect(boundingBox, Paint(Color.RED))
     }
 
     override fun update(userInput: UserInput, directions: Array<Boolean>) {
@@ -61,7 +62,7 @@ class Background: GameObject {
     }
 
     private fun detectCollisions(pObj: Physics, bBox: Rect) {
-        if (bBox.intersect(pObj.boundingBox)){
+        if (Rect.intersects(pObj.boundingBox, bBox)){
             val w = 0.5 * (bBox.width() + pObj.boundingBox.width()) // Average width
             val h = 0.5 * (bBox.height() + pObj.boundingBox.height()) // Average height
             val dx = bBox.centerX() - pObj.boundingBox.centerX() // difference of centers
@@ -73,21 +74,22 @@ class Background: GameObject {
 
                 if (wy > hx) {
                     if (wy > -hx) {
-                        pObj.collisions[1] = true // UP
-                        //Log.i("HOM","UPPPPPP")
+                        pObj.collisions[3] = true // UP
+//                        Log.i("HOM","DOWNNNNNN")
                     }
                     else {
                         pObj.collisions[0] = true // LEFT
+//                        Log.i("HOM","LEFT")
                     }
                 }
                 else {
                     if (wy > -hx) {
                         pObj.collisions[4] = true // RIGHT
-                        //Log.i("HOM", "RIGHT")
+//                        Log.i("HOM", "RIGHT")
                     }
                     else {
-                        pObj.collisions[3] = true // DOWN
-                        //Log.i("HOM", "DOWN")
+                        pObj.collisions[1] = true // DOWN
+//                        Log.i("HOM", "UP")
                     }
                 }
             }

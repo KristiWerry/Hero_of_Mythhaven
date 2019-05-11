@@ -36,7 +36,7 @@ class Landing:GameObject{
     }
 
     override fun collision(pObj: Physics){
-        if (boundingBox.intersect(pObj.boundingBox)){
+        if (Rect.intersects(pObj.boundingBox, boundingBox)){
             val w = 0.5 * (boundingBox.width() + pObj.boundingBox.width())
             val h = 0.5 * (boundingBox.height() + pObj.boundingBox.height())
             val dx = boundingBox.centerX() - pObj.boundingBox.centerX()
@@ -47,18 +47,18 @@ class Landing:GameObject{
 
                 if (wy > hx) {
                     if (wy > -hx) {
-                        pObj.collisions[1] = true
+                        pObj.collisions[3] = true // DOWN
                     }
                     else {
-                        pObj.collisions[0] = true
+                        pObj.collisions[0] = true // LEFT
                     }
                 }
                 else {
                     if (wy > -hx) {
-                        pObj.collisions[2] = true
+                        pObj.collisions[2] = true // RIGHT
                     }
                     else {
-                        pObj.collisions[3] = true
+                        pObj.collisions[1] = true // UP
                     }
 
                 }

@@ -42,7 +42,7 @@ class GameManager{
                 middlePoint.y = gameView.height * 0.59f
 
                 playerLocation.x = middlePoint.x - 500
-                playerLocation.y = middlePoint.y
+                playerLocation.y = middlePoint.y - 200
                 player = Player(players, playerLocation)
 
                 val backgroundBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
