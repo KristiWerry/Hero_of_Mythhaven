@@ -5,10 +5,11 @@ import android.util.Log
 import kotlin.math.abs
 
 class Background: GameObject {
-    override var velocityX: Float = 5f
+    override var location = PointF(0f,0f)
+    override var velocityX: Float = VX
     override var velocityY: Float = 0f
     override var gravity: Float = 0f
-    override var time: Float = 0.5f
+    override var time: Float = TIME
     override var boundingBox: RectF
     private var floorBoundingBox: Rect
 
@@ -67,6 +68,7 @@ class Background: GameObject {
             val dy = boundingBox.centerY() - pObj.boundingBox.centerY()
 
             if (abs(dx) <= w && abs(dy) <= h) {
+                // The diagonals
                 val wy = w * dy
                 val hx = h * dx
 
@@ -84,7 +86,7 @@ class Background: GameObject {
                 }
                 else {
                     if (wy > -hx) {
-                        pObj.velocityX = -1f // RIGHT
+                        pObj.velocityX = -0.5f // RIGHT
 //                        Log.i("HOM", "RIGHT")
                         return Direction.RIGHT
                     }

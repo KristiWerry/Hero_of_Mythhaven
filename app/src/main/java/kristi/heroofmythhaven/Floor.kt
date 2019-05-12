@@ -5,6 +5,7 @@ import android.util.Log
 import kotlin.math.abs
 
 class Floor: GameObject {
+    override var location: PointF
     override var velocityX: Float = 0f
     override var velocityY: Float = 0f
     override var gravity: Float = 0f
@@ -12,6 +13,7 @@ class Floor: GameObject {
     override var boundingBox: RectF
 
     constructor(mBitmaps: List<Bitmap>, screenSize: PointF) {
+        location = PointF(0f, screenSize.y * 0.79f)
         boundingBox = RectF(0f, screenSize.y * 0.79f, screenSize.x, screenSize.y)
     }
 
@@ -30,6 +32,7 @@ class Floor: GameObject {
                     if (wy > -hx) {
                         pObj.velocityY = 0f// BOTTOM
                         pObj.gravity = 0f
+                        pObj.location.y -= (h - dy).toFloat()
 //                        Log.i("HOM","DOWNNNNNN")
                         return Direction.BOTTOM
                     }
@@ -61,7 +64,7 @@ class Floor: GameObject {
     }
 
     override fun draw(canvas: Canvas) {
-        canvas.drawRect(boundingBox, Paint(Color.RED))
+        //canvas.drawRect(boundingBox, Paint(Color.RED))
     }
 
     override fun update(context: Boolean) {

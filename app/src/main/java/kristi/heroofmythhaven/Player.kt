@@ -1,13 +1,11 @@
 package kristi.heroofmythhaven
 
 import android.graphics.*
-import android.util.Log
-import java.security.AccessControlContext
 import kotlin.collections.ArrayList
 
 class Player: GameObject{
+    override var location = PointF(0f,0f)
     private var player: ArrayList<Bitmap>
-    private var playerLocation = PointF(0f,0f)
     private var playerFrame = 0
     private var mTime = 0f
 
@@ -15,37 +13,37 @@ class Player: GameObject{
     override var velocityY = 0f
     override var boundingBox: RectF
     override var velocityX = 0f
-    override var gravity = 9f
-    override var time = 0.5f
+    override var gravity = GRAVITY
+    override var time = TIME
 
     constructor(mBitmap: ArrayList<Bitmap>, startingPoint: PointF) {
         player = mBitmap
-        playerLocation.x = startingPoint.x
-        playerLocation.y = startingPoint.y
-        boundingBox = RectF(playerLocation.x, playerLocation.y, playerLocation.x + mBitmap[0].width, playerLocation.y + mBitmap[0].height)
+        this.location.x = startingPoint.x
+        this.location.y = startingPoint.y
+        boundingBox = RectF(this.location.x, this.location.y, this.location.x + mBitmap[0].width, this.location.y + mBitmap[0].height)
     }
 
     override fun draw(canvas: Canvas) {
-        canvas.drawBitmap(player[playerFrame], playerLocation.x, playerLocation.y, null)
+        canvas.drawBitmap(player[playerFrame], this.location.x, this.location.y, null)
         //canvas.drawRect(boundingBox, Paint(Color.RED))
     }
 
     // Ignore input location because the player already has this information
     override fun update(context: Boolean) {
         if (context) {
-            move(playerLocation)
+            move(this.location)
         }
 
         // Update the players bounding box
-        boundingBox.left = playerLocation.x
-        boundingBox.right = playerLocation.x + player[0].width
-        boundingBox.top = playerLocation.y
-        boundingBox.bottom = playerLocation.y + player[0].height
+        boundingBox.left = this.location.x
+        boundingBox.right = this.location.x + player[0].width
+        boundingBox.top = this.location.y
+        boundingBox.bottom = this.location.y + player[0].height
     }
 
     fun getLocation(point: PointF) {
-        point.x = playerLocation.x
-        point.y = playerLocation.y
+        point.x = this.location.x
+        point.y = this.location.y
     }
 
     override fun move(point: PointF){
@@ -57,11 +55,6 @@ class Player: GameObject{
 
     override fun collision(pObj: Physics): Direction{
         return Direction.NONE
-    }
-
-    fun setPlayerLocation(newLocation: PointF) {
-        playerLocation.x = newLocation.x
-        playerLocation.y = newLocation.y
     }
 
     fun resetTime() {

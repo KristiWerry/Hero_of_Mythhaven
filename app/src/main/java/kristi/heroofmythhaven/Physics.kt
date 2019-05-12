@@ -18,6 +18,7 @@ interface Physics {
     var gravity: Float
     var time: Float
     var boundingBox: RectF
+    var location: PointF
 
     fun collision(pObj: Physics): Direction  //
     fun move(point: PointF) // Maybe have this return something? TBD

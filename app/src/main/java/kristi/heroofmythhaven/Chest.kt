@@ -3,39 +3,32 @@ package kristi.heroofmythhaven
 import android.graphics.*
 
 class Chest: GameObject{
-    override var velocityX: Float = 0f
+    override var location: PointF
+    override var velocityX: Float = VX
     override var velocityY: Float = 0f
     override var gravity: Float = 0f
-    override var time: Float = 0f
+    override var time: Float = TIME
 
     override var boundingBox = RectF(0f,0f,0f,0f)
-
     private var chest: Bitmap
-    private var xCoor: Float
-    private var yCoor: Float
 
     constructor(mBitmap: Bitmap, startingPoint: PointF) {
         chest = mBitmap
-        xCoor = startingPoint.x
-        yCoor = startingPoint.y
+        location = startingPoint
     }
 
     override fun draw(canvas: Canvas) {
-        canvas.drawBitmap(chest, xCoor, yCoor, null)
+        canvas.drawBitmap(chest, location.x, location.y, null)
     }
 
     override fun update(context: Boolean) {
         if (context) {
-            xCoor -= 5
+            location.x -= velocityX * time
         }
     }
 
     override fun move(point: PointF) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    fun trajectory(point: PointF, time: Float){
-
     }
 
     override fun collision(pObj: Physics): Direction{

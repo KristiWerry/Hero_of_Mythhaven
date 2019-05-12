@@ -33,29 +33,29 @@ class LevelActivity : AppCompatActivity() {
         gameView.setGameManager(gameManager)
         leftButton.setOnTouchListener {_, motionEvent ->
             when(motionEvent.action and MotionEvent.ACTION_MASK) {
-                MotionEvent.ACTION_DOWN -> {gameManager.update(UserInput.LEFT); gameView.setUserInput(UserInput.LEFT)}
-                MotionEvent.ACTION_UP -> {gameManager.update(UserInput.NOINPUT);gameView.setUserInput(UserInput.NOINPUT)}
+                MotionEvent.ACTION_DOWN -> {gameView.setUserInput(UserInput.LEFT)}
+                MotionEvent.ACTION_UP -> {gameView.setUserInput(UserInput.NOINPUT)}
             }
             true
         }
         rightButton.setOnTouchListener {_, motionEvent ->
             when(motionEvent.action and MotionEvent.ACTION_MASK) {
-                MotionEvent.ACTION_DOWN -> {gameManager.update(UserInput.RIGHT); gameView.setUserInput(UserInput.RIGHT)}
-                MotionEvent.ACTION_UP -> {gameManager.update(UserInput.NOINPUT);gameView.setUserInput(UserInput.NOINPUT)}
+                MotionEvent.ACTION_DOWN -> {gameView.setUserInput(UserInput.RIGHT)}
+                MotionEvent.ACTION_UP -> {gameView.setUserInput(UserInput.NOINPUT)}
             }
             true
         }
         attackButton.setOnTouchListener {_, motionEvent ->
             when(motionEvent.action and MotionEvent.ACTION_MASK) {
-                MotionEvent.ACTION_DOWN -> {gameManager.update(UserInput.ATTACK); gameView.setUserInput(UserInput.ATTACK)}
-                MotionEvent.ACTION_UP -> {gameManager.update(UserInput.NOINPUT);gameView.setUserInput(UserInput.NOINPUT)}
+                MotionEvent.ACTION_DOWN -> {gameView.setUserInput(UserInput.ATTACK)}
+                MotionEvent.ACTION_UP -> {gameView.setUserInput(UserInput.NOINPUT)}
             }
             true
         }
         jumpButton.setOnTouchListener {_, motionEvent ->
             when(motionEvent.action and MotionEvent.ACTION_MASK) {
-                MotionEvent.ACTION_DOWN -> {gameManager.update(UserInput.JUMP); gameView.setUserInput(UserInput.JUMP)}
-                MotionEvent.ACTION_UP -> {gameManager.update(UserInput.NOINPUT);gameView.setUserInput(UserInput.NOINPUT)}
+                MotionEvent.ACTION_DOWN -> {gameView.setUserInput(UserInput.JUMP)}
+                MotionEvent.ACTION_UP -> {gameView.setUserInput(UserInput.NOINPUT)}
             }
             true
         }

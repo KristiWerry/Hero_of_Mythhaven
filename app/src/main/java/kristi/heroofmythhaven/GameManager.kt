@@ -5,23 +5,24 @@ import android.graphics.BitmapFactory
 import android.graphics.PointF
 import android.util.Log
 
+// These constants are used as a standard by all game objects for physics operations
+const val TIME = 0.25f
+const val VX = 10f
+const val VY = 18f
+const val GRAVITY = 9f
+
 class GameManager{
 
-    // Step 1: on creation should load all of the drawable objects for the level
-    //      - Main character, background
-    //      - Save in a list
-    //      - Should have a n update function that updates all of the objects
-    //      -
-    // Step 2(FUTURE): Collision/ Jumping / Game management
     private lateinit var gameObjects: MutableList<GameObject>
     private val context: LevelActivity
     private var loaded = false
-    private var playerLocation = PointF()
     private var middlePoint = PointF()
     private lateinit var player: Player
     private lateinit var background: Background
     private var playerFrames = ArrayList<Bitmap>(4)
     private var ground: Float = 0f
+    private var isJumping = true // Boolean representing if the player is jumping
+    var userInput = mutableMapOf(UserInput.NOINPUT to false, UserInput.LEFT to false, UserInput.RIGHT to false, UserInput.JUMP to false, UserInput.ATTACK to false)
 
     constructor(level: Int, context: LevelActivity) {
         this.context = context
@@ -40,14 +41,10 @@ class GameManager{
                     R.drawable.death_knight4), 200, 200, false))
                 val gameView = context.findViewById<GameView>(R.id.gameView)
 
-                Log.i("HOM", "GAME VIEW HEIGHT: " + gameView.height)
-
                 middlePoint.x = gameView.width * 0.5f - (playerFrames[0].width/2)
                 middlePoint.y = gameView.height * 0.59f
                 ground = gameView.height.toFloat() * 0.79f
-                playerLocation.x = middlePoint.x - 500
-                playerLocation.y = middlePoint.y - 200
-                player = Player(playerFrames, playerLocation)
+                player = Player(playerFrames, PointF(middlePoint.x - 500,middlePoint.y - 200))
 
                 val backgroundBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
                     R.drawable.level1_background), gameView.width+5, gameView.height, false)
@@ -68,39 +65,70 @@ class GameManager{
             }
     }
 
-    private var isAerial = true
-    fun update(userInput: UserInput) {
+    fun update() {
         var context = false
+        var bottomCollision = false
 
-        when(userInput) {
-            UserInput.NOINPUT -> {
-                player.velocityX = 0f
-
-                if (!isAerial) {
-                    player.velocityY = 0f
-                    player.gravity = 0f
-                }
+        if (userInput[UserInput.JUMP] as Boolean && userInput[UserInput.RIGHT] as Boolean) {
+            Log.i("HOM", "HEREEEEE?")
+            if (!isJumping) {
+                player.location.y -= 1
+                player.gravity = GRAVITY
+                player.velocityY = VY
+                player.velocityX = VX
+                player.time = TIME
+                player.resetTime()
+                isJumping = true
             }
-            UserInput.JUMP -> {
-                if (!isAerial) {
-                    playerLocation.y -= 1
-                    player.setPlayerLocation(playerLocation)
-                    player.gravity = 9f
-                    player.velocityY = 18f
-                    player.time = 0.5f
-                    player.resetTime()
-                    isAerial = true
-                }
-            }
-            UserInput.LEFT -> {
-                if (playerLocation.x >= 0) {
-                    player.velocityX = -5f
+        }
+        else if (userInput[UserInput.JUMP] as Boolean && userInput[UserInput.LEFT] as Boolean) {
+            Log.i("HOM", "HEREEEEE?")
+            if (!isJumping) {
+                player.location.y -= 1
+                player.gravity = GRAVITY
+                player.velocityY = VY
+                if (player.location.x >= 0) {
+                    player.velocityX = -VX
                 }
                 else {
                     player.velocityX = 0f
                 }
+                player.time = TIME
+                player.resetTime()
+                isJumping = true
             }
-            UserInput.RIGHT -> {player.velocityX = 5f}
+        }
+        else if (userInput[UserInput.LEFT] as Boolean && userInput[UserInput.RIGHT] as Boolean) {
+            player.velocityX = 0f
+        }
+        else if (userInput[UserInput.NOINPUT] as Boolean){
+            player.velocityX = 0f
+
+            if (!isJumping) {
+                player.velocityY = 0f
+                player.gravity = 0f
+            }
+        }
+        else if (userInput[UserInput.JUMP] as Boolean) {
+            if (!isJumping) {
+                player.location.y -= 1
+                player.gravity = GRAVITY
+                player.velocityY = VY
+                player.time = TIME
+                player.resetTime()
+                isJumping = true
+            }
+        }
+        else if (userInput[UserInput.LEFT] as Boolean) {
+            if (player.location.x >= 0) {
+                player.velocityX = -VX
+            }
+            else {
+                player.velocityX = 0f
+            }
+        }
+        else if (userInput[UserInput.RIGHT] as Boolean){
+            player.velocityX = VX
         }
 
         // Collision has the side effect of possibly altering the player's internal physics parameters if a collision occurs
@@ -109,8 +137,9 @@ class GameManager{
                 Direction.NONE -> {} // Do nothing
                 Direction.TOP -> {}
                 Direction.BOTTOM -> {
-                    isAerial = false
+                    isJumping = false
                     player.resetTime()
+                    bottomCollision = true
                 }
                 Direction.LEFT -> {}
                 Direction.RIGHT -> {
@@ -121,17 +150,20 @@ class GameManager{
             }
         }
 
+        // Addresses a bug where the player walks off an obstacle but does not fall
+        if (!bottomCollision) {
+            player.gravity = GRAVITY
+        }
+
         for (gameObj in gameObjects) {
             gameObj.update(context)
         }
 
         // The movement of the player and the other objects of the game are inversely related
         player.update(!context) // This should eventually become the specific context for characters
-        player.getLocation(playerLocation)
 
-        if (playerLocation.y + player.getPlayerHeight() >= ground) {
-            playerLocation.y -= playerLocation.y - ground + player.getPlayerHeight()
-            player.setPlayerLocation(playerLocation)
+        for (entry in userInput) {
+            entry.setValue(false)
         }
     }
 

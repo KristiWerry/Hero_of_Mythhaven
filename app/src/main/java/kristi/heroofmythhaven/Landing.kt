@@ -6,14 +6,14 @@ import kotlin.math.abs
 
 class Landing: GameObject{
     // Physics Interface
-    override var velocityX: Float = 5f
+    override var velocityX: Float = VX
     override var velocityY: Float = 0f
     override var gravity: Float = 0f
-    override var time: Float = 0.5f
+    override var time: Float = TIME
     override var boundingBox: RectF
+    override var location: PointF
 
     private var landing: Bitmap
-    private var location: PointF
 
     constructor(mBitmap: Bitmap, startingPoint: PointF) {
         landing = mBitmap
@@ -51,6 +51,7 @@ class Landing: GameObject{
                     if (wy > -hx) {
                         pObj.velocityY = 0f // BOTTOM
                         pObj.gravity = 0f
+                        pObj.location.y -= (h - dy).toFloat()
                         return Direction.BOTTOM
                     }
                     else {
