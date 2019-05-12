@@ -2,6 +2,7 @@ package kristi.heroofmythhaven
 
 import android.graphics.PointF
 import android.graphics.Rect
+import android.graphics.RectF
 
 enum class Direction {
     TOP,
@@ -16,9 +17,8 @@ interface Physics {
     var velocityY: Float
     var gravity: Float
     var time: Float
-    var boundingBox: Rect
-    //var collisionDirection: Direction
+    var boundingBox: RectF
 
-    fun collision(pObj: Physics): Boolean // Should have the side effect of setting the collisionDirection variable with which side of the object a collision was detected
-    fun move(point: PointF) // Maybe have this reutnr something? TBD
+    fun collision(pObj: Physics): Direction  //
+    fun move(point: PointF) // Maybe have this return something? TBD
 }

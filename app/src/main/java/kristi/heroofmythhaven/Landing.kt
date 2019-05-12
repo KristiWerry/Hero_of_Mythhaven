@@ -10,7 +10,7 @@ class Landing: GameObject{
     override var velocityY: Float = 0f
     override var gravity: Float = 0f
     override var time: Float = 0.5f
-    override var boundingBox: Rect
+    override var boundingBox: RectF
 
     private var landing: Bitmap
     private var location: PointF
@@ -18,7 +18,7 @@ class Landing: GameObject{
     constructor(mBitmap: Bitmap, startingPoint: PointF) {
         landing = mBitmap
         location = PointF(startingPoint.x, startingPoint.y)
-        boundingBox = Rect(location.x.toInt(), location.y.toInt(), (location.x + mBitmap.width).toInt(), (location.y + mBitmap.height).toInt())
+        boundingBox = RectF(location.x, location.y, location.x + mBitmap.width, location.y + mBitmap.height)
     }
 
     override fun draw(canvas: Canvas) {
@@ -29,16 +29,16 @@ class Landing: GameObject{
         if (context) {
             move(location)
         }
-        boundingBox.left = location.x.toInt()
-        boundingBox.right = (location.x + landing.width).toInt()
+        boundingBox.left = location.x
+        boundingBox.right = location.x + landing.width
     }
 
     override fun move(point: PointF) {
         point.x -= velocityX*time
     }
 
-    override fun collision(pObj: Physics): Boolean{
-        if (Rect.intersects(pObj.boundingBox, boundingBox)){
+    override fun collision(pObj: Physics): Direction{
+        if (RectF.intersects(pObj.boundingBox, boundingBox)){
             val w = 0.5 * (boundingBox.width() + pObj.boundingBox.width())
             val h = 0.5 * (boundingBox.height() + pObj.boundingBox.height())
             val dx = boundingBox.centerX() - pObj.boundingBox.centerX()
@@ -49,25 +49,28 @@ class Landing: GameObject{
 
                 if (wy > hx) {
                     if (wy > -hx) {
-                        pObj.velocityY = 1f // DOWN
+                        pObj.velocityY = 0f // BOTTOM
                         pObj.gravity = 0f
+                        return Direction.BOTTOM
                     }
                     else {
                         pObj.velocityX = 1f // LEFT
+                        return Direction.LEFT
                     }
                 }
                 else {
                     if (wy > -hx) {
                         pObj.velocityX = -1f // RIGHT
+                        return Direction.RIGHT
                     }
                     else {
-                        pObj.velocityY = 1f // UP
+                        pObj.velocityY = 1f // TOP
+                        return Direction.TOP
                     }
 
                 }
             }
-            return true
         }
-        return false
+        return Direction.NONE
     }
 }

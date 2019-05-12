@@ -1,9 +1,6 @@
 package kristi.heroofmythhaven
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.PointF
-import android.graphics.Rect
+import android.graphics.*
 
 class Chest: GameObject{
     override var velocityX: Float = 0f
@@ -11,7 +8,7 @@ class Chest: GameObject{
     override var gravity: Float = 0f
     override var time: Float = 0f
 
-    override var boundingBox: Rect = Rect(0,0,0,0)
+    override var boundingBox = RectF(0f,0f,0f,0f)
 
     private var chest: Bitmap
     private var xCoor: Float
@@ -41,7 +38,7 @@ class Chest: GameObject{
 
     }
 
-    override fun collision(pObj: Physics): Boolean{
-        return false
+    override fun collision(pObj: Physics): Direction{
+        return Direction.NONE
     }
 }

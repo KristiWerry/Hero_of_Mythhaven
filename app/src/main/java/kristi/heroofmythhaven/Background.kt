@@ -9,7 +9,7 @@ class Background: GameObject {
     override var velocityY: Float = 0f
     override var gravity: Float = 0f
     override var time: Float = 0.5f
-    override var boundingBox: Rect
+    override var boundingBox: RectF
     private var floorBoundingBox: Rect
 
     private var background1: Bitmap
@@ -27,7 +27,7 @@ class Background: GameObject {
         this.screenSize = screenSize
         bLocation1 = PointF(0f,0f)
         bLocation2 = PointF(screenSize.x, 0f)
-        boundingBox = Rect((screenSize.x/2).toInt(), 0, screenSize.x.toInt(), screenSize.y.toInt())
+        boundingBox = RectF(screenSize.x/2, 0f, screenSize.x, screenSize.y)
         floorBoundingBox = Rect(0, (screenSize.y * 0.79f).toInt(), screenSize.x.toInt(), screenSize.y.toInt()) //left, top, right, bottom
     }
 
@@ -59,8 +59,8 @@ class Background: GameObject {
         point.x -= velocityX*time
     }
 
-    override fun collision(pObj: Physics): Boolean{
-        if (Rect.intersects(pObj.boundingBox, boundingBox)){
+    override fun collision(pObj: Physics): Direction{
+        if (RectF.intersects(pObj.boundingBox, boundingBox)){
             val w = 0.5 * (boundingBox.width() + pObj.boundingBox.width()) // Average width
             val h = 0.5 * (boundingBox.height() + pObj.boundingBox.height()) // Average height
             val dx = boundingBox.centerX() - pObj.boundingBox.centerX() // difference of centers
@@ -72,28 +72,30 @@ class Background: GameObject {
 
                 if (wy > hx) {
                     if (wy > -hx) {
-                        pObj.velocityY = 0f// DOWN
+                        pObj.velocityY = 0f// BOTTOM
 //                        Log.i("HOM","DOWNNNNNN")
+                        return Direction.BOTTOM
                     }
                     else {
                         pObj.velocityX = 0F// LEFT
 //                        Log.i("HOM","LEFT")
+                        return Direction.LEFT
                     }
                 }
                 else {
                     if (wy > -hx) {
                         pObj.velocityX = -1f // RIGHT
 //                        Log.i("HOM", "RIGHT")
+                        return Direction.RIGHT
                     }
                     else {
-                        pObj.velocityY = 0f // UP
+                        pObj.velocityY = 0f // TOP
 //                        Log.i("HOM", "UP")
+                        return Direction.TOP
                     }
                 }
             }
-            return true
         }
-
-        return false
+        return Direction.NONE
     }
 }
