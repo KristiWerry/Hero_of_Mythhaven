@@ -30,7 +30,11 @@ class GameView: View{
         this.gameManager = gameManager
     }
 
-    fun setUserInput(input: UserInput) {
-        gameManager.userInput[input] = true
+    fun setLeftUserInput(leftInput: MovementUserInput) {
+        //gameManager.userInput[input] = true
+        gameManager.leftUserInput = leftInput
+    }
+    fun setRightUserInput(rightInput: ActionUserInput) {
+        gameManager.rightUserInput = rightInput
     }
 }

@@ -86,7 +86,7 @@ class Background: GameObject {
                 }
                 else {
                     if (wy > -hx) {
-                        pObj.velocityX = -0.5f // RIGHT
+                        pObj.velocityX = -0.75f // RIGHT
 //                        Log.i("HOM", "RIGHT")
                         return Direction.RIGHT
                     }

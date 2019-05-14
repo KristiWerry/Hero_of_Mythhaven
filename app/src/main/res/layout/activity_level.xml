@@ -54,6 +54,8 @@
             <LinearLayout android:layout_width="fill_parent"
                           android:orientation="horizontal"
                           android:layout_alignParentBottom="true"
+                          android:id="@+id/buttonLayout"
+                          android:splitMotionEvents="true"
                           android:layout_height="80dp">
                 <ImageView android:layout_width="0dp"
                            android:layout_height="match_parent"

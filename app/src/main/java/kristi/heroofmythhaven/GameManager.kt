@@ -7,12 +7,11 @@ import android.util.Log
 
 // These constants are used as a standard by all game objects for physics operations
 const val TIME = 0.25f
-const val VX = 10f
+const val VX = 13f
 const val VY = 18f
-const val GRAVITY = 9f
+const val GRAVITY = 7f
 
 class GameManager{
-
     private lateinit var gameObjects: MutableList<GameObject>
     private val context: LevelActivity
     private var loaded = false
@@ -22,7 +21,10 @@ class GameManager{
     private var playerFrames = ArrayList<Bitmap>(4)
     private var ground: Float = 0f
     private var isJumping = true // Boolean representing if the player is jumping
-    var userInput = mutableMapOf(UserInput.NOINPUT to false, UserInput.LEFT to false, UserInput.RIGHT to false, UserInput.JUMP to false, UserInput.ATTACK to false)
+    //var userInput = mutableMapOf(UserInput.NOINPUT to false, UserInput.LEFT to false, UserInput.RIGHT to false, UserInput.JUMP to false, UserInput.ATTACK to false)
+    var rightUserInput: ActionUserInput = ActionUserInput.NOTHING
+    var leftUserInput: MovementUserInput = MovementUserInput.NOINPUT
+
 
     constructor(level: Int, context: LevelActivity) {
         this.context = context
@@ -69,8 +71,8 @@ class GameManager{
         var context = false
         var bottomCollision = false
 
-        if (userInput[UserInput.JUMP] as Boolean && userInput[UserInput.RIGHT] as Boolean) {
-            Log.i("HOM", "HEREEEEE?")
+        if (leftUserInput == MovementUserInput.RIGHT && rightUserInput == ActionUserInput.JUMP) {
+            Log.i("HOM", "RIGHT and JUMP")
             if (!isJumping) {
                 player.location.y -= 1
                 player.gravity = GRAVITY
@@ -81,8 +83,8 @@ class GameManager{
                 isJumping = true
             }
         }
-        else if (userInput[UserInput.JUMP] as Boolean && userInput[UserInput.LEFT] as Boolean) {
-            Log.i("HOM", "HEREEEEE?")
+        else if (leftUserInput == MovementUserInput.LEFT && rightUserInput == ActionUserInput.JUMP) {
+            Log.i("HOM", "LEFT and JUMP")
             if (!isJumping) {
                 player.location.y -= 1
                 player.gravity = GRAVITY
@@ -92,16 +94,18 @@ class GameManager{
                 }
                 else {
                     player.velocityX = 0f
+                    player.location.x = 0f
                 }
                 player.time = TIME
                 player.resetTime()
                 isJumping = true
             }
         }
-        else if (userInput[UserInput.LEFT] as Boolean && userInput[UserInput.RIGHT] as Boolean) {
-            player.velocityX = 0f
-        }
-        else if (userInput[UserInput.NOINPUT] as Boolean){
+//        else if (userInput[UserInput.LEFT] as Boolean && userInput[UserInput.RIGHT] as Boolean) {
+//            player.velocityX = 0f
+//        }
+        else if (leftUserInput == MovementUserInput.NOINPUT && rightUserInput == ActionUserInput.NOTHING){
+            Log.i("HOM", "NOINPUT and NOTHING")
             player.velocityX = 0f
 
             if (!isJumping) {
@@ -109,7 +113,8 @@ class GameManager{
                 player.gravity = 0f
             }
         }
-        else if (userInput[UserInput.JUMP] as Boolean) {
+        else if (leftUserInput == MovementUserInput.NOINPUT && rightUserInput == ActionUserInput.JUMP) {
+            Log.i("HOM", "NOINPUT and JUMP")
             if (!isJumping) {
                 player.location.y -= 1
                 player.gravity = GRAVITY
@@ -119,16 +124,27 @@ class GameManager{
                 isJumping = true
             }
         }
-        else if (userInput[UserInput.LEFT] as Boolean) {
+        else if (leftUserInput == MovementUserInput.LEFT && rightUserInput == ActionUserInput.NOTHING) {
+            Log.i("HOM", "LEFT and NOTHING")
             if (player.location.x >= 0) {
                 player.velocityX = -VX
             }
             else {
                 player.velocityX = 0f
+                player.location.x = 0f
+            }
+            if (!isJumping) {
+                player.velocityY = 0f
+                player.gravity = 0f
             }
         }
-        else if (userInput[UserInput.RIGHT] as Boolean){
+        else if (leftUserInput == MovementUserInput.RIGHT && rightUserInput == ActionUserInput.NOTHING){
+            Log.i("HOM", "RIGHT and NOTHING")
             player.velocityX = VX
+            if (!isJumping) {
+                player.velocityY = 0f
+                player.gravity = 0f
+            }
         }
 
         // Collision has the side effect of possibly altering the player's internal physics parameters if a collision occurs
@@ -137,6 +153,7 @@ class GameManager{
                 Direction.NONE -> {} // Do nothing
                 Direction.TOP -> {}
                 Direction.BOTTOM -> {
+                    Log.i("HOM", "COLLISION BOTTOM")
                     isJumping = false
                     player.resetTime()
                     bottomCollision = true
@@ -162,9 +179,9 @@ class GameManager{
         // The movement of the player and the other objects of the game are inversely related
         player.update(!context) // This should eventually become the specific context for characters
 
-        for (entry in userInput) {
-            entry.setValue(false)
-        }
+//        for (entry in userInput) {
+//            entry.setValue(false)
+//        }
     }
 
     fun getGameObjects(): List<GameObject> {

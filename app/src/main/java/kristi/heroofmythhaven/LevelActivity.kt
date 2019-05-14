@@ -12,12 +12,15 @@ import android.widget.Button
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_level.*
 
-enum class UserInput {
+enum class MovementUserInput {
     LEFT,
     RIGHT,
-    JUMP,
-    ATTACK,
     NOINPUT
+}
+enum class ActionUserInput {
+    ATTACK,
+    JUMP,
+    NOTHING
 }
 
 class LevelActivity : AppCompatActivity() {
@@ -31,31 +34,32 @@ class LevelActivity : AppCompatActivity() {
         super.onStart()
         gameManager = GameManager(1, this@LevelActivity)
         gameView.setGameManager(gameManager)
+
         leftButton.setOnTouchListener {_, motionEvent ->
             when(motionEvent.action and MotionEvent.ACTION_MASK) {
-                MotionEvent.ACTION_DOWN -> {gameView.setUserInput(UserInput.LEFT)}
-                MotionEvent.ACTION_UP -> {gameView.setUserInput(UserInput.NOINPUT)}
+                MotionEvent.ACTION_DOWN -> {gameView.setLeftUserInput(MovementUserInput.LEFT)}
+                MotionEvent.ACTION_UP -> {gameView.setLeftUserInput(MovementUserInput.NOINPUT)}
             }
             true
         }
         rightButton.setOnTouchListener {_, motionEvent ->
             when(motionEvent.action and MotionEvent.ACTION_MASK) {
-                MotionEvent.ACTION_DOWN -> {gameView.setUserInput(UserInput.RIGHT)}
-                MotionEvent.ACTION_UP -> {gameView.setUserInput(UserInput.NOINPUT)}
+                MotionEvent.ACTION_DOWN -> {gameView.setLeftUserInput(MovementUserInput.RIGHT)}
+                MotionEvent.ACTION_UP -> {gameView.setLeftUserInput(MovementUserInput.NOINPUT)}
             }
             true
         }
         attackButton.setOnTouchListener {_, motionEvent ->
             when(motionEvent.action and MotionEvent.ACTION_MASK) {
-                MotionEvent.ACTION_DOWN -> {gameView.setUserInput(UserInput.ATTACK)}
-                MotionEvent.ACTION_UP -> {gameView.setUserInput(UserInput.NOINPUT)}
+                MotionEvent.ACTION_DOWN -> {gameView.setRightUserInput(ActionUserInput.ATTACK)}
+                MotionEvent.ACTION_UP -> {gameView.setRightUserInput(ActionUserInput.NOTHING)}
             }
             true
         }
         jumpButton.setOnTouchListener {_, motionEvent ->
             when(motionEvent.action and MotionEvent.ACTION_MASK) {
-                MotionEvent.ACTION_DOWN -> {gameView.setUserInput(UserInput.JUMP)}
-                MotionEvent.ACTION_UP -> {gameView.setUserInput(UserInput.NOINPUT)}
+                MotionEvent.ACTION_DOWN -> {gameView.setRightUserInput(ActionUserInput.JUMP)}
+                MotionEvent.ACTION_UP -> {gameView.setRightUserInput(ActionUserInput.NOTHING)}
             }
             true
         }
