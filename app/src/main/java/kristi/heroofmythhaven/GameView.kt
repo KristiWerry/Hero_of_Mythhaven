@@ -1,9 +1,11 @@
 package kristi.heroofmythhaven
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
+import android.widget.Toast
 
 class GameView: View{
     constructor(context: Context): super(context)

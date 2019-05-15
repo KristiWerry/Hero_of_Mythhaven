@@ -33,7 +33,7 @@ class Floor: GameObject {
                         pObj.velocityY = 0f// BOTTOM
                         pObj.gravity = 0f
                         pObj.location.y -= (h - dy).toFloat()
-                        Log.i("HOM","DOWNNNNNN------------------------------------------------------")
+//                        Log.i("HOM","DOWNNNNNN------------------------------------------------------")
                         return Direction.BOTTOM
                     }
                     else {

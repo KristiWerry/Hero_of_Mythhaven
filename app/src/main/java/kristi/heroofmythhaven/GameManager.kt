@@ -1,13 +1,16 @@
 package kristi.heroofmythhaven
 
+import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.PointF
 import android.util.Log
+import android.widget.Toast
 
 // These constants are used as a standard by all game objects for physics operations
 const val TIME = 0.25f
-const val VX = 13f
+const val VX = 18f
 const val VY = 18f
 const val GRAVITY = 7f
 
@@ -18,13 +21,15 @@ class GameManager{
     private var middlePoint = PointF()
     private lateinit var player: Player
     private lateinit var background: Background
+    private lateinit var chest: Chest
     private var playerFrames = ArrayList<Bitmap>(4)
     private var ground: Float = 0f
     private var isJumping = true // Boolean representing if the player is jumping
     //var userInput = mutableMapOf(UserInput.NOINPUT to false, UserInput.LEFT to false, UserInput.RIGHT to false, UserInput.JUMP to false, UserInput.ATTACK to false)
     var rightUserInput: ActionUserInput = ActionUserInput.NOTHING
     var leftUserInput: MovementUserInput = MovementUserInput.NOINPUT
-
+    private lateinit var gameView: GameView
+    private var youWin = false
 
     constructor(level: Int, context: LevelActivity) {
         this.context = context
@@ -41,38 +46,31 @@ class GameManager{
                     R.drawable.death_knight3), 200, 200, false))
                 playerFrames.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
                     R.drawable.death_knight4), 200, 200, false))
-                val gameView = context.findViewById<GameView>(R.id.gameView)
+                gameView = context.findViewById<GameView>(R.id.gameView)
 
                 middlePoint.x = gameView.width * 0.5f - (playerFrames[0].width/2)
                 middlePoint.y = gameView.height * 0.59f
                 ground = gameView.height.toFloat() * 0.79f
                 player = Player(playerFrames, PointF(middlePoint.x - 500,middlePoint.y - 200))
 
-                val backgroundBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
-                    R.drawable.level1_background), gameView.width+5, gameView.height, false)
-                background = Background(listOf<Bitmap>(backgroundBitmap,backgroundBitmap),
-                    PointF(gameView.width.toFloat(), gameView.height.toFloat()))
-
                 val floor = Floor(listOf(), PointF(gameView.width.toFloat(), gameView.height.toFloat()))
 
-                val chest = Chest(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
-                    R.drawable.chest), 100, 100, false), PointF(4*gameView.width.toFloat(),
-                    gameView.height.toFloat()* 0.69f))
-
-                val landing = Landing(BitmapFactory.decodeResource(context.resources,
-                    R.drawable.landing1), PointF(gameView.width.toFloat()/2+500,gameView.height * 0.65f) )
-
                 loaded = true
-                gameObjects = mutableListOf(background, player, chest, landing, floor)
+                val loadedLevel = LevelLoader(context, 1)
+                gameObjects = loadedLevel.getGameObjs()
+                gameObjects.add(player)
+                gameObjects.add(floor)
+                background = loadedLevel.getBackground()
+                chest = loadedLevel.getChest()
             }
     }
 
     fun update() {
-        var context = false
+        var movementContext = false
         var bottomCollision = false
 
         if (leftUserInput == MovementUserInput.RIGHT && rightUserInput == ActionUserInput.JUMP) {
-            Log.i("HOM", "RIGHT and JUMP")
+            //Log.i("HOM", "RIGHT and JUMP")
             if (!isJumping) {
                 player.location.y -= 1
                 player.gravity = GRAVITY
@@ -84,15 +82,15 @@ class GameManager{
             }
         }
         else if (leftUserInput == MovementUserInput.LEFT && rightUserInput == ActionUserInput.JUMP) {
-            Log.i("HOM", "LEFT and JUMP")
+            //Log.i("HOM", "LEFT and JUMP")
             if (!isJumping) {
                 player.location.y -= 1
                 player.gravity = GRAVITY
                 player.velocityY = VY
-                if (player.location.x >= 0) {
+                //if (player.location.x >= 0) {
                     player.velocityX = -VX
-                }
-                else {
+                //}
+                if (player.location.x < 0) {
                     player.velocityX = 0f
                     player.location.x = 0f
                 }
@@ -100,12 +98,16 @@ class GameManager{
                 player.resetTime()
                 isJumping = true
             }
+            if (player.location.x < 0) {
+                player.velocityX = 0f
+                player.location.x = 0f
+            }
         }
 //        else if (userInput[UserInput.LEFT] as Boolean && userInput[UserInput.RIGHT] as Boolean) {
 //            player.velocityX = 0f
 //        }
         else if (leftUserInput == MovementUserInput.NOINPUT && rightUserInput == ActionUserInput.NOTHING){
-            Log.i("HOM", "NOINPUT and NOTHING")
+//            Log.i("HOM", "NOINPUT and NOTHING")
             player.velocityX = 0f
 
             if (!isJumping) {
@@ -114,7 +116,7 @@ class GameManager{
             }
         }
         else if (leftUserInput == MovementUserInput.NOINPUT && rightUserInput == ActionUserInput.JUMP) {
-            Log.i("HOM", "NOINPUT and JUMP")
+            //Log.i("HOM", "NOINPUT and JUMP")
             if (!isJumping) {
                 player.location.y -= 1
                 player.gravity = GRAVITY
@@ -125,11 +127,11 @@ class GameManager{
             }
         }
         else if (leftUserInput == MovementUserInput.LEFT && rightUserInput == ActionUserInput.NOTHING) {
-            Log.i("HOM", "LEFT and NOTHING")
-            if (player.location.x >= 0) {
+            //Log.i("HOM", "LEFT and NOTHING")
+            //if (player.location.x >= 0) {
                 player.velocityX = -VX
-            }
-            else {
+            //}
+            if(player.location.x < 0) {
                 player.velocityX = 0f
                 player.location.x = 0f
             }
@@ -139,7 +141,7 @@ class GameManager{
             }
         }
         else if (leftUserInput == MovementUserInput.RIGHT && rightUserInput == ActionUserInput.NOTHING){
-            Log.i("HOM", "RIGHT and NOTHING")
+            //Log.i("HOM", "RIGHT and NOTHING")
             player.velocityX = VX
             if (!isJumping) {
                 player.velocityY = 0f
@@ -153,15 +155,31 @@ class GameManager{
                 Direction.NONE -> {} // Do nothing
                 Direction.TOP -> {}
                 Direction.BOTTOM -> {
-                    Log.i("HOM", "COLLISION BOTTOM")
+//                    Log.i("HOM", "COLLISION BOTTOM")
                     isJumping = false
                     player.resetTime()
                     bottomCollision = true
+                    if (gameObj == chest && !youWin) {
+                        Toast.makeText(context, "YOU WIN!!!", Toast.LENGTH_SHORT).show()
+                        gameView.postDelayed({context.finish()}, 10000)
+                        youWin = true
+                    }
                 }
-                Direction.LEFT -> {}
+                Direction.LEFT -> {
+                    if (gameObj == chest && !youWin) {
+                        Toast.makeText(context, "YOU WIN!!!", Toast.LENGTH_SHORT).show()
+                        gameView.postDelayed({context.finish()}, 10000)
+                        youWin = true
+                    }
+                }
                 Direction.RIGHT -> {
                     if (gameObj == background) {
-                        context = true
+                        movementContext = true
+                    }
+                    if (gameObj == chest && !youWin) {
+                        Toast.makeText(context, "YOU WIN!!!", Toast.LENGTH_SHORT).show()
+                        gameView.postDelayed({context.finish()}, 10000)
+                        youWin = true
                     }
                 }
             }
@@ -173,11 +191,11 @@ class GameManager{
         }
 
         for (gameObj in gameObjects) {
-            gameObj.update(context)
+            gameObj.update(movementContext)
         }
 
         // The movement of the player and the other objects of the game are inversely related
-        player.update(!context) // This should eventually become the specific context for characters
+        player.update(!movementContext) // This should eventually become the specific context for characters
 
 //        for (entry in userInput) {
 //            entry.setValue(false)

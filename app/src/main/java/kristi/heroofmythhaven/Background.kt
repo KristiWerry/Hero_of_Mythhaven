@@ -11,7 +11,6 @@ class Background: GameObject {
     override var gravity: Float = 0f
     override var time: Float = TIME
     override var boundingBox: RectF
-    private var floorBoundingBox: Rect
 
     private var background1: Bitmap
     private var bLocation1: PointF
@@ -28,14 +27,12 @@ class Background: GameObject {
         this.screenSize = screenSize
         bLocation1 = PointF(0f,0f)
         bLocation2 = PointF(screenSize.x, 0f)
-        boundingBox = RectF(screenSize.x/2, 0f, screenSize.x, screenSize.y)
-        floorBoundingBox = Rect(0, (screenSize.y * 0.79f).toInt(), screenSize.x.toInt(), screenSize.y.toInt()) //left, top, right, bottom
+        boundingBox = RectF(screenSize.x/2, -500f, screenSize.x, screenSize.y)
     }
 
     override fun draw(canvas: Canvas) {
         canvas.drawBitmap(background1, bLocation1.x, bLocation1.y, null)
         canvas.drawBitmap(background2, bLocation2.x, bLocation2.y, null)
-        //canvas.drawRect(floorBoundingBox, Paint(Color.RED))
         //canvas.drawRect(boundingBox, Paint(Color.RED))
     }
 
