@@ -13,6 +13,7 @@ class LevelLoader {
 //    private val file: File
     private val jsonObj: JSONObject
     private val gameObjs = mutableListOf<GameObject>()
+    val monsterObjs = mutableListOf<Monster>()
     private val context: LevelActivity
     private val background: Background
     private lateinit var chest: Chest
@@ -38,7 +39,7 @@ class LevelLoader {
         background = Background(listOf<Bitmap>(backgroundBitmap,backgroundBitmap), PointF(gameView.width.toFloat(), gameView.height.toFloat()))
         gameObjs.add(background)
 
-        // construct the remaining game objects
+        // construct the remaining non-enemy game objects
         val levelGameObjs = jsonObj.getJSONObject(level.toString()).getJSONArray(GAMEOBJS)
         for (i in 0 until levelGameObjs.length()) { // for every game object
             val gameObj = levelGameObjs.getJSONObject(i)
@@ -56,6 +57,10 @@ class LevelLoader {
                         val bitMap = getBitMap(jObj)
                         chest = Chest(bitMap, PointF(jObj.getInt("x").toFloat(), (gameView.height.toFloat() * 0.79f) - (bitMap.height * jObj.getInt("y").toFloat())))
                         gameObjs.add(chest)
+                    }
+                    "monster" -> {
+                        val bitMap = getBitMap(jObj)
+                        monsterObjs.add(Monster(bitMap, jObj.getInt("hp"), jObj.getInt("damage"), PointF(jObj.getInt("x").toFloat(), (gameView.height.toFloat() * 0.79f) - (bitMap.height * jObj.getInt("y").toFloat()))))
                     }
                 }
             }

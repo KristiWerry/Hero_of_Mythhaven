@@ -12,6 +12,7 @@ class Landing: GameObject{
     override var time: Float = TIME
     override var boundingBox: RectF
     override var location: PointF
+    override var mTime = 0f
 
     private var landing: Bitmap
 
@@ -54,14 +55,14 @@ class Landing: GameObject{
                         pObj.location.y -= (h - dy).toFloat()
                         return Direction.BOTTOM
                     }
-                    else {
-                        pObj.velocityX = 1f // LEFT
+                    else { // LEFT
+                        pObj.location.x += (w + dx).toFloat()
                         return Direction.LEFT
                     }
                 }
                 else {
-                    if (wy > -hx) {
-                        pObj.velocityX = -1f // RIGHT
+                    if (wy > -hx) { // RIGHT
+                        pObj.location.x -= (w - dx).toFloat()
                         return Direction.RIGHT
                     }
                     else {

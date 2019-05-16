@@ -10,14 +10,15 @@ class Chest: GameObject{
     override var velocityY: Float = 0f
     override var gravity: Float = 0f
     override var time: Float = TIME
+    override var mTime = 0f
 
     override var boundingBox: RectF
     private var chest: Bitmap
 
-    constructor(mBitmap: Bitmap, startingPoint: PointF) {
-        chest = mBitmap
+    constructor(bitMap: Bitmap, startingPoint: PointF) {
+        chest = bitMap
         location = startingPoint
-        boundingBox = RectF(location.x, location.y, location.x + mBitmap.width, location.y + mBitmap.height)
+        boundingBox = RectF(location.x, location.y, location.x + bitMap.width, location.y + bitMap.height)
     }
 
     override fun draw(canvas: Canvas) {
@@ -53,14 +54,14 @@ class Chest: GameObject{
                         pObj.location.y -= (h - dy).toFloat()
                         return Direction.BOTTOM
                     }
-                    else {
-                        pObj.velocityX = 1f // LEFT
+                    else { // LEFT
+                        pObj.location.x += (w + dx).toFloat()
                         return Direction.LEFT
                     }
                 }
                 else {
-                    if (wy > -hx) {
-                        pObj.velocityX = -1f // RIGHT
+                    if (wy > -hx) { // RIGHT
+                        pObj.location.x -= (w - dx).toFloat()
                         return Direction.RIGHT
                     }
                     else {

@@ -10,6 +10,16 @@
              }
         },
         {
+            "monster": {
+                "x": "1500",
+                "y": "1",
+                "hp":"1",
+                "damage": "1",
+                "movement": "move1",
+                "filename": "slime_blue"
+             }
+        },
+        {
             "landing": {
                  "x": "2100",
                  "y": "1",
@@ -48,7 +58,7 @@
              "landing": {
                   "x": "4100",
                   "y": "1",
-                  "filename": "landing4"
+                  "filename": "landing3"
               }
         },
         {
@@ -67,15 +77,15 @@
         },
         {
              "landing": {
-                  "x": "4620",
+                  "x": "4490",
                   "y": "1",
-                  "filename": "landing1"
+                  "filename": "landing2"
               }
         },
         {
              "landing": {
-                  "x": "4700",
-                  "y": "5",
+                  "x": "4750",
+                  "y": "5.25",
                   "filename": "landing1"
               }
         },
@@ -116,7 +126,7 @@
         },
         {
              "landing": {
-                  "x": "5830",
+                  "x": "5840",
                   "y": "2",
                   "filename": "green_alter"
               }
@@ -166,14 +176,14 @@
         {
             "landing": {
                   "x": "8700",
-                  "y": "3",
+                  "y": "2.5",
                   "filename": "landing3"
              }
         },
         {
             "landing": {
                   "x": "8830",
-                  "y": "5",
+                  "y": "4.5",
                   "filename": "landing1"
              }
         },

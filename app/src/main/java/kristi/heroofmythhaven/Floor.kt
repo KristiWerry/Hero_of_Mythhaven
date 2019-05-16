@@ -11,6 +11,7 @@ class Floor: GameObject {
     override var gravity: Float = 0f
     override var time: Float = 0f
     override var boundingBox: RectF
+    override var mTime = 0f
 
     constructor(mBitmaps: List<Bitmap>, screenSize: PointF) {
         location = PointF(0f, screenSize.y * 0.79f)
@@ -34,10 +35,16 @@ class Floor: GameObject {
                         pObj.gravity = 0f
                         pObj.location.y -= (h - dy).toFloat()
 //                        Log.i("HOM","DOWNNNNNN------------------------------------------------------")
+//                        if(pObj.location.y + pObj.boundingBox.height()> boundingBox.top) { //testing to get player not to fall into ground
+//                            Log.i("HOM", "Player Location "+ (pObj.location.y + pObj.boundingBox.height()))
+//                            Log.i("HOM", "Bounding Box top"+ boundingBox.top)
+//                            Log.i("HOM", "Bounding Box height"+ boundingBox.height())
+//                            pObj.location.y = boundingBox.top - pObj.boundingBox.height()
+//                        }
                         return Direction.BOTTOM
                     }
                     else {
-                        pObj.velocityX = 0F// LEFT
+                        pObj.velocityX = 0f// LEFT
 //                        Log.i("HOM","LEFT")
                         return Direction.LEFT
                     }

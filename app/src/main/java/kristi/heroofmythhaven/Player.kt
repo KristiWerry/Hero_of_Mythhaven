@@ -1,13 +1,21 @@
 package kristi.heroofmythhaven
 
 import android.graphics.*
+import android.util.Log
 import kotlin.collections.ArrayList
+import kotlin.math.abs
 
-class Player: GameObject{
-    override var location = PointF(0f,0f)
+class Player: GameObject, CharacterAttributes{
+    // Character Attributes Interface Variables
+    override var hp: Int
+    override var damage: Int
+
     private var player: ArrayList<Bitmap>
     private var playerFrame = 0
-    private var mTime = 0f
+    private var rightAttackBoundingBox: RectF
+    private var leftAttackBoundingBox: RectF
+
+    var facingRight = true
 
     // Physics interface (which game object requires implementation of
     override var velocityY = 0f
@@ -15,23 +23,30 @@ class Player: GameObject{
     override var velocityX = 0f
     override var gravity = GRAVITY
     override var time = TIME
+    override var mTime = 0f
+    override var location = PointF(0f,0f)
 
-    constructor(mBitmap: ArrayList<Bitmap>, startingPoint: PointF) {
+    constructor(mBitmap: ArrayList<Bitmap>, startingPoint: PointF, hp: Int, damage: Int) {
         player = mBitmap
+        this.hp = hp
+        this.damage = damage
         this.location.x = startingPoint.x
         this.location.y = startingPoint.y
         boundingBox = RectF(this.location.x, this.location.y, this.location.x + mBitmap[0].width, this.location.y + mBitmap[0].height)
+        leftAttackBoundingBox = RectF(this.location.x - 50, this.location.y, this.location.x + mBitmap[0].width, this.location.y + mBitmap[0].height)
+        rightAttackBoundingBox = RectF(this.location.x, this.location.y, this.location.x + mBitmap[0].width + 50, this.location.y + mBitmap[0].height)
     }
 
     override fun draw(canvas: Canvas) {
         canvas.drawBitmap(player[playerFrame], this.location.x, this.location.y, null)
-        //canvas.drawRect(boundingBox, Paint(Color.RED))
+//        canvas.drawRect(boundingBox, Paint(Color.RED))
     }
 
     // Ignore input location because the player already has this information
     override fun update(context: Boolean) {
+//        Log.i("HOM", "PLAYER HP: " + hp)
         if (context) {
-            move(this.location)
+            move(location)
         }
 
         // Update the players bounding box
@@ -39,6 +54,16 @@ class Player: GameObject{
         boundingBox.right = this.location.x + player[0].width
         boundingBox.top = this.location.y
         boundingBox.bottom = this.location.y + player[0].height
+
+        leftAttackBoundingBox.left = this.location.x - 50
+        leftAttackBoundingBox.right = this.location.x + player[0].width
+        leftAttackBoundingBox.top = this.location.y
+        leftAttackBoundingBox.bottom = this.location.y + player[0].height
+
+        rightAttackBoundingBox.left = this.location.x
+        rightAttackBoundingBox.right = this.location.x + player[0].width + 50
+        rightAttackBoundingBox.top = this.location.y
+        rightAttackBoundingBox.bottom = this.location.y + player[0].height
     }
 
     fun getLocation(point: PointF) {
@@ -54,11 +79,74 @@ class Player: GameObject{
     }
 
     override fun collision(pObj: Physics): Direction{
+        val bBox: RectF
+
+        if (facingRight) {
+            bBox = rightAttackBoundingBox
+        }
+        else {
+            bBox = leftAttackBoundingBox
+        }
+//
+        if (RectF.intersects(pObj.boundingBox, bBox)){
+            val w = 0.5 * (bBox.width() + pObj.boundingBox.width())
+            val h = 0.5 * (bBox.height() + pObj.boundingBox.height())
+            val dx = bBox.centerX() - pObj.boundingBox.centerX()
+            val dy = bBox.centerY() - pObj.boundingBox.centerY()
+
+            if (abs(dx) <= w && abs(dy) <= h) {
+                val wy = w * dy
+                val hx = h * dx
+
+                if (wy > hx) {
+                    if (wy > -hx) {
+                        return Direction.BOTTOM
+                    }
+                    else { // LEFT
+                        pObj.location.x += (w + dx).toFloat() + 50
+                        pObj.location.y -= (h - dy).toFloat()
+                        pObj.velocityY = -VY
+                        pObj.gravity = GRAVITY
+                        pObj.mTime = 0f
+                        return Direction.LEFT
+                    }
+                }
+                else {
+                    if (wy > -hx) { // RIGHT
+                        pObj.location.x -= (w - dx).toFloat()
+                        pObj.location.y -= (h - dy).toFloat()
+                        pObj.velocityY = -VY
+                        pObj.gravity = GRAVITY
+                        pObj.mTime = 0f
+                        return Direction.RIGHT
+                    }
+                    else {
+                        pObj.location.y -= (h - dy).toFloat()
+                        if ((pObj.location.x - location.x) > 0) {
+                            pObj.location.x += (w + dx).toFloat() + 50
+                        }
+                        else {
+                            pObj.location.x -= (w - dx).toFloat() + 50
+                        }
+                        pObj.velocityY = -VY
+                        pObj.gravity = GRAVITY
+                        pObj.mTime = 0f
+                        return Direction.TOP
+                    }
+
+                }
+            }
+        }
         return Direction.NONE
     }
 
     fun resetTime() {
         mTime = 0f
+    }
+
+    override fun dealDamage(character: CharacterAttributes): Int {
+        character.hp -= damage
+        return character.hp
     }
 
     fun getPlayerWidth(): Int{

@@ -20,7 +20,13 @@ class GameView: View{
         gameManager.loadGameObject()
         gameManager.update()
         for (gameObj in gameManager.getGameObjects()) { // FIX THIS WILL YOU LAZY BUM
-            gameObj.draw(canvas)
+//            for (gameObj in gameObjList.value) {
+                gameObj.draw(canvas)
+//            }
+        }
+
+        for (monster in gameManager.getMonsterObjects()) {
+            monster.draw(canvas)
         }
 
 

@@ -17,6 +17,7 @@ interface Physics {
     var velocityY: Float
     var gravity: Float
     var time: Float
+    var mTime: Float
     var boundingBox: RectF
     var location: PointF
 

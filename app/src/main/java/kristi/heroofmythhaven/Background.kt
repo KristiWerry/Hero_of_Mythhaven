@@ -11,6 +11,7 @@ class Background: GameObject {
     override var gravity: Float = 0f
     override var time: Float = TIME
     override var boundingBox: RectF
+    override var mTime = 0f
 
     private var background1: Bitmap
     private var bLocation1: PointF
@@ -82,8 +83,9 @@ class Background: GameObject {
                     }
                 }
                 else {
-                    if (wy > -hx) {
-                        pObj.velocityX = -0.75f // RIGHT
+                    if (wy > -hx) { // RIGHT
+                        pObj.location.x -= (w - dx).toFloat()
+//                        pObj.velocityX = -0.75f
 //                        Log.i("HOM", "RIGHT")
                         return Direction.RIGHT
                     }
