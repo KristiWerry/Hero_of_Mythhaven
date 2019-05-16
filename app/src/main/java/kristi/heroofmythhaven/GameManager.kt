@@ -335,13 +335,11 @@ class GameManager{
     }
 
     fun youWin() {
-        Toast.makeText(context, "YOU WIN!!!", Toast.LENGTH_SHORT).show()
-        gameView.postDelayed({ context.finish() }, 3000)
+        context.showEndPopup(true)
     }
 
     fun youLose() {
-        Toast.makeText(context, "YOU LOSE >:)", Toast.LENGTH_SHORT).show()
-        gameView.postDelayed({ context.finish() }, 2000)
+        context.showEndPopup(false)
     }
 
     fun getGameObjects(): List<GameObject> {

@@ -9,17 +9,22 @@
             android:roundIcon="@mipmap/mythhaven_icon_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".LevelActivity"
+        <activity android:name=".LoginActivity"
                   android:screenOrientation="sensorLandscape">
-        </activity>
-        <activity
-                android:name=".MainActivity"
-                android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity
+                android:name=".LevelActivity"
+                android:screenOrientation="sensorLandscape">
+        </activity>
+        <activity
+                android:name=".MainActivity"
+                android:screenOrientation="sensorLandscape">
+
         </activity>
     </application>
 

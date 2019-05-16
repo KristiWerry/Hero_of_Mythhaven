@@ -14,34 +14,30 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.pause_popup.*
 
 class MainActivity : AppCompatActivity() {
-
+    private var username: String = ""
+    private var level: Int = 1
+    private var gold: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        username = intent.getStringExtra("Username")
+        playNameMain.text = username
+        val levelTitle = getString(R.string.levelTitle) + level.toString()
+        levelMain.text = levelTitle
+        val goldTitle = getString(R.string.goldTitle) + gold.toString()
+        goldMain.text = goldTitle
+
         quest1.setOnClickListener {
             val startQuest1 = Intent(this, LevelActivity::class.java)
+            startQuest1.putExtra("Username", username)
+            startQuest1.putExtra("Level", level)
+            startQuest1.putExtra("Gold", gold)
             startActivity(startQuest1)
         }
     }
-    /*fun showQuestPopup(view: View) {
-        var dialogs = Dialog(this)
-        dialogs.setCancelable(false)
-        dialogs.setContentView(R.layout.pause_popup)
-        pauseTitle.text = "Quest 1"
-        val resumeBtn = dialogs.findViewById(R.id.resumeButton) as Button
-        resumeBtn.text = getString(R.string.embark)
-        val quitBtn = dialogs.findViewById(R.id.quitButton) as TextView
-        quitBtn.text = getString(R.string.back)
-        resumeBtn.setOnClickListener {
-            dialogs.dismiss()
-            val startQuest1 = Intent(this, LevelActivity::class.java)
-            startActivity(startQuest1)
-        }
-        quitBtn.setOnClickListener {
-            dialogs.dismiss()
-        }
-        dialogs.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogs.show()
-    }*/
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+    }
 }

@@ -2,12 +2,16 @@
     <string name="app_name">Hero Of Mythhaven</string>
     <string name="violet_hawk">Violet Hawk</string>
     <string name="quests">Quests</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="paused">Paused</string>
     <string name="resume">Resume</string>
     <string name="quit">Quit</string>
-    <string name="embark">Embark on Quest</string>
+    <string name="embark">Embark</string>
     <string name="back">Back</string>
+    <string name="hero_of_mythhaven">Hero of Mythhaven</string>
+    <string name="enter_username">Enter Username</string>
+    <string name="levelTitle">Level: </string>
+    <string name="goldTitle">Gold: </string>
+    <string name="restart">Restart</string>
+    <string name="you_lose">You Lose</string>
+    <string name="you_win">You Win!!</string>
 </resources>

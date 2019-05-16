@@ -24,7 +24,6 @@
                   android:layout_weight="1"
                   android:id="@+id/playNameMain"
                   android:textStyle="bold"
-                  android:text="@string/violet_hawk"
                   android:layout_marginStart="10dp"
                   android:gravity="center"
                   android:textSize="20sp"/>
