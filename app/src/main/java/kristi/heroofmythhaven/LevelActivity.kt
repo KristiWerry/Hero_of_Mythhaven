@@ -24,20 +24,26 @@ enum class ActionUserInput {
 }
 
 class LevelActivity : AppCompatActivity() {
+    private var level = 0
     private lateinit var gameManager: GameManager
-
+    private var questLevelNumber: Int = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_level)
-
-        playNameLevel.text = intent.getStringExtra("Username")
-        levelLevel.text = String.format(getString(R.string.levelTitle) + intent.getIntExtra("Level", 0).toString())
-        goldLevel.text = String.format(getString(R.string.goldTitle) + intent.getIntExtra("Gold", 0).toString())
+        val username = intent.getStringExtra("Username")
+        playNameLevel.text = username
+        val level = intent.getIntExtra("Level", 0)
+        val levelTitle = getString(R.string.levelTitle) + level.toString()
+        levelLevel.text = levelTitle
+        val gold = intent.getIntExtra("Gold", 0)
+        val goldTitle = getString(R.string.goldTitle) + gold.toString()
+        goldLevel.text = goldTitle
+        questLevelNumber = intent.getIntExtra("QuestNumber", 1)
     }
 
     override fun onStart() {
         super.onStart()
-        gameManager = GameManager(1, this@LevelActivity)
+        gameManager = GameManager(questLevelNumber, this@LevelActivity, level)
         gameView.setGameManager(gameManager)
 
         leftButton.setOnTouchListener {_, motionEvent ->
@@ -85,7 +91,10 @@ class LevelActivity : AppCompatActivity() {
         }
         quitBtn.setOnClickListener {
             dialogs.dismiss()
-            finish()
+            val levelResult = intent
+            levelResult.putExtra("DidWin", false)
+            setResult(RESULT_OK, levelResult) //return the final score to main activity
+            finish() //finish and go back to main activity //kills this activity //not on back stack
         }
 
         dialogs.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -97,9 +106,15 @@ class LevelActivity : AppCompatActivity() {
         val titleText: String
         if(didWin) {
             titleText = getString(R.string.you_win)
+            val levelResult = intent
+            levelResult.putExtra("DidWin", true)
+            setResult(RESULT_OK, levelResult) //return the final score to main activity
         }
         else {
             titleText = getString(R.string.you_lose)
+            val levelResult = intent
+            levelResult.putExtra("DidWin", false)
+            setResult(RESULT_OK, levelResult) //return the final score to main activity
         }
 
         // Create the dialog
@@ -115,12 +130,12 @@ class LevelActivity : AppCompatActivity() {
         restartBtn.setOnClickListener {
             //Restart the game by giving the gameView a new gameManager (in its initial state)
             dialogs.dismiss()
-            gameManager = GameManager(1, this@LevelActivity)
+            gameManager = GameManager(questLevelNumber, this@LevelActivity, level)
             gameView.setGameManager(gameManager)
         }
         quitBtn.setOnClickListener {
             dialogs.dismiss()
-            finish()
+            finish() //finish and go back to main activity //kills this activity //not on back stack
         }
         dialogs.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialogs.show()
