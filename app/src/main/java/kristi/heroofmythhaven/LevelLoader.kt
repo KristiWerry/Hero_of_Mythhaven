@@ -39,7 +39,7 @@ class LevelLoader {
         background = Background(listOf<Bitmap>(backgroundBitmap,backgroundBitmap), PointF(gameView.width.toFloat(), gameView.height.toFloat()))
         gameObjs.add(background)
 
-        // construct the remaining non-enemy game objects
+        // construct the remaining game objects
         val levelGameObjs = jsonObj.getJSONObject(level.toString()).getJSONArray(GAMEOBJS)
         for (i in 0 until levelGameObjs.length()) { // for every game object
             val gameObj = levelGameObjs.getJSONObject(i)

@@ -1,6 +1,7 @@
 package kristi.heroofmythhaven
 
 import android.graphics.*
+import android.support.v4.view.ViewCompat.animate
 import android.util.Log
 import kotlin.collections.ArrayList
 import kotlin.math.abs
@@ -16,6 +17,10 @@ class Player: GameObject, CharacterAttributes{
     private var leftAttackBoundingBox: RectF
 
     var facingRight = true
+    var isWalking = false
+    var isJumping = false
+    var isAttacking = false
+    private var clock = 0
 
     // Physics interface (which game object requires implementation of
     override var velocityY = 0f
@@ -42,7 +47,6 @@ class Player: GameObject, CharacterAttributes{
 //        canvas.drawRect(boundingBox, Paint(Color.RED))
     }
 
-    // Ignore input location because the player already has this information
     override fun update(context: Boolean) {
 //        Log.i("HOM", "PLAYER HP: " + hp)
         if (context) {
@@ -55,6 +59,7 @@ class Player: GameObject, CharacterAttributes{
         boundingBox.top = this.location.y
         boundingBox.bottom = this.location.y + player[0].height
 
+        //update players attack bounding box
         leftAttackBoundingBox.left = this.location.x - 50
         leftAttackBoundingBox.right = this.location.x + player[0].width
         leftAttackBoundingBox.top = this.location.y
@@ -66,6 +71,85 @@ class Player: GameObject, CharacterAttributes{
         rightAttackBoundingBox.bottom = this.location.y + player[0].height
     }
 
+    fun animate(context: GameView) {
+        if(isWalking && facingRight) { //walk right
+             if(clock++ == 5){
+                 if(playerFrame == 0) {
+                     playerFrame = 1
+                 }
+                 else {
+                     playerFrame = 0
+                 }
+                 clock = 0
+             }
+        }
+        else if(isWalking && !facingRight) { //walk left
+            if(clock++ == 5){
+                if(playerFrame == 4) {
+                    playerFrame = 5
+                }
+                else {
+                    playerFrame = 4
+                }
+                clock = 0
+            }
+        }
+        else if(isJumping && facingRight) { //jumping right
+            if(clock++ == 5){
+                if(playerFrame == 0) {
+                    playerFrame = 3
+                }
+                else {
+                    playerFrame = 0
+                }
+                clock = 0
+            }
+        }
+        else if(isJumping && !facingRight) { //jumping left
+            if(clock++ == 5){
+                if(playerFrame == 4) {
+                    playerFrame = 7
+                }
+                else {
+                    playerFrame = 4
+                }
+                clock = 0
+            }
+        }
+        else if(isAttacking && facingRight) { //attack right
+            if(clock++ == 5){
+                if(playerFrame == 0) {
+                    playerFrame = 2
+                }
+                else {
+                    playerFrame = 0
+                }
+                clock = 0
+            }
+        }
+        else if(isAttacking && !facingRight) {//attack left
+            if(clock++ == 5){
+                if(playerFrame == 4) {
+                    playerFrame = 6
+                }
+                else {
+                    playerFrame = 4
+                }
+                clock = 0
+            }
+        }
+        else {
+            if(facingRight){
+                playerFrame = 0
+            }
+            else {
+                playerFrame = 4
+            }
+        }
+
+
+    }
+
     fun getLocation(point: PointF) {
         point.x = this.location.x
         point.y = this.location.y
@@ -73,7 +157,6 @@ class Player: GameObject, CharacterAttributes{
 
     override fun move(point: PointF){
         mTime += time
-        //Log.i("HOM", "MTIME: " + mTime)
         point.x += (velocityX * (time))
         point.y -= (velocityY * (mTime) - 0.5f * gravity * mTime * mTime)
     }

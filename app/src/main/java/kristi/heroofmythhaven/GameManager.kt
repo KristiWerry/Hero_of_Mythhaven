@@ -1,10 +1,8 @@
 package kristi.heroofmythhaven
 
-import android.drm.DrmStore
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.PointF
-import android.text.method.MovementMethod
 import android.util.Log
 import android.widget.Toast
 
@@ -23,10 +21,9 @@ class GameManager{
     private lateinit var player: Player
     private lateinit var background: Background
     private lateinit var chest: Chest
-    private var playerFrames = ArrayList<Bitmap>(4)
+    private var playerFrames = ArrayList<Bitmap>(8)
     private var ground: Float = 0f
     private var isJumping = true // Boolean representing if the player is jumping
-    //var userInput = mutableMapOf(UserInput.NOINPUT to false, UserInput.LEFT to false, UserInput.RIGHT to false, UserInput.JUMP to false, UserInput.ATTACK to false)
     var rightUserInput: ActionUserInput = ActionUserInput.NOTHING
     var leftUserInput: MovementUserInput = MovementUserInput.NOINPUT
     private lateinit var gameView: GameView
@@ -47,6 +44,14 @@ class GameManager{
                     R.drawable.death_knight3), 150, 150, false))
                 playerFrames.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
                     R.drawable.death_knight4), 150, 150, false))
+                playerFrames.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
+                    R.drawable.death_knight_l), 150, 150, false))
+                playerFrames.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
+                    R.drawable.death_knight2_l), 150, 150, false))
+                playerFrames.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
+                    R.drawable.death_knight3_l), 150, 150, false))
+                playerFrames.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
+                    R.drawable.death_knight4_l), 150, 150, false))
                 gameView = context.findViewById(R.id.gameView)
 
                 middlePoint.x = gameView.width * 0.5f - (playerFrames[0].width/2)
@@ -77,6 +82,9 @@ class GameManager{
             if (!isJumping) {
                 player.velocityX = 0f
                 isAttacking = true
+                player.isAttacking = true
+                player.isWalking = false
+                player.isJumping = false
             }
         }
         else if (leftUserInput == MovementUserInput.RIGHT && rightUserInput == ActionUserInput.ATTACK) {
@@ -84,16 +92,23 @@ class GameManager{
             if (!isJumping) {
                 player.velocityX = 0f
                 isAttacking = true
+                player.isAttacking = true
+                player.isWalking = false
+                player.isJumping = false
             }
         }
         else if (leftUserInput == MovementUserInput.NOINPUT && rightUserInput == ActionUserInput.ATTACK) {
             if (!isJumping) {
                 player.velocityX = 0f
                 isAttacking = true
+                player.isAttacking = true
+                player.isWalking = false
+                player.isJumping = false
             }
         }
         else {
             isAttacking = false
+            player.isAttacking = false
         }
 
         if (!isAttacking) {
@@ -109,6 +124,8 @@ class GameManager{
                     isJumping = true
                 }
                 player.facingRight = true
+                player.isJumping = true
+                player.isWalking = false
             } else if (leftUserInput == MovementUserInput.LEFT && rightUserInput == ActionUserInput.JUMP) {
                 //Log.i("HOM", "LEFT and JUMP")
                 if (!isJumping) {
@@ -131,10 +148,9 @@ class GameManager{
                     player.location.x = 0f
                 }
                 player.facingRight = false
+                player.isJumping = true
+                player.isWalking = false
             }
-//        else if (userInput[UserInput.LEFT] as Boolean && userInput[UserInput.RIGHT] as Boolean) {
-//            player.velocityX = 0f
-//        }
             else if (leftUserInput == MovementUserInput.NOINPUT && rightUserInput == ActionUserInput.NOTHING) {
 //            Log.i("HOM", "NOINPUT and NOTHING")
                 player.velocityX = 0f
@@ -146,6 +162,8 @@ class GameManager{
                     player.velocityY = 0f
                     player.gravity = 0f
                 }
+                player.isJumping = false
+                player.isWalking = false
             } else if (leftUserInput == MovementUserInput.NOINPUT && rightUserInput == ActionUserInput.JUMP) {
                 //Log.i("HOM", "NOINPUT and JUMP")
                 if (!isJumping) {
@@ -156,11 +174,11 @@ class GameManager{
                     player.resetTime()
                     isJumping = true
                 }
+                player.isJumping = true
+                player.isWalking = false
             } else if (leftUserInput == MovementUserInput.LEFT && rightUserInput == ActionUserInput.NOTHING) {
                 //Log.i("HOM", "LEFT and NOTHING")
-                //if (player.location.x >= 0) {
                 player.velocityX = -VX
-                //}
                 if (player.location.x < 0) {
                     player.velocityX = 0f
                     player.location.x = 0f
@@ -170,6 +188,8 @@ class GameManager{
                     player.gravity = 0f
                 }
                 player.facingRight = false
+                player.isJumping = false
+                player.isWalking = true
             } else if (leftUserInput == MovementUserInput.RIGHT && rightUserInput == ActionUserInput.NOTHING) {
                 //Log.i("HOM", "RIGHT and NOTHING")
                 player.velocityX = VX
@@ -178,32 +198,30 @@ class GameManager{
                     player.gravity = 0f
                 }
                 player.facingRight = true
+                player.isJumping = false
+                player.isWalking = true
             }
         }
 
         // Collision has the side effect of possibly altering the player's internal physics parameters if a collision occurs
-        for (gameObj in gameObjects) {
+        for (gameObj in gameObjects) { //check the objects colliding with the player
             if (gameObj != player) {
                 when (gameObj.collision(player)) {
-                    Direction.NONE -> {
-                    } // Do nothing
-                    Direction.TOP -> {
-                    }
+                    Direction.NONE -> {} // Do nothing
+                    Direction.TOP -> {}
                     Direction.BOTTOM -> {
 //                    Log.i("HOM", "COLLISION BOTTOM")
                         isJumping = false
                         player.resetTime()
                         bottomCollision = true
                         if (gameObj == chest && !youWin) {
-                            Toast.makeText(context, "YOU WIN!!!", Toast.LENGTH_SHORT).show()
-                            gameView.postDelayed({ context.finish() }, 10000)
+                            youWin()
                             youWin = true
                         }
                     }
                     Direction.LEFT -> {
                         if (gameObj == chest && !youWin) {
-                            Toast.makeText(context, "YOU WIN!!!", Toast.LENGTH_SHORT).show()
-                            gameView.postDelayed({ context.finish() }, 10000)
+                            youWin()
                             youWin = true
                         }
                     }
@@ -212,8 +230,7 @@ class GameManager{
                             movementContext = true
                         }
                         if (gameObj == chest && !youWin) {
-                            Toast.makeText(context, "YOU WIN!!!", Toast.LENGTH_SHORT).show()
-                            gameView.postDelayed({ context.finish() }, 3000)
+                            youWin()
                             youWin = true
                         }
                     }
@@ -224,7 +241,7 @@ class GameManager{
         for (monster in monsterObjects) {
             for (gameObj in gameObjects) {
                 if (gameObj != background && gameObj != player) {
-                    when (gameObj.collision(monster)) {
+                    when (gameObj.collision(monster)) { //check if the monsters collide with the game objects
                         Direction.NONE -> {
                         } // Do nothing
                         Direction.TOP -> {
@@ -244,31 +261,27 @@ class GameManager{
                 }
             }
             if (!isAttacking) {
-                when (monster.collision(player)) {
+                when (monster.collision(player)) { //check if the monster is hitting the player
                     Direction.NONE -> {
                     } // Do nothing
                     Direction.TOP -> {
                         if (monster.dealDamage(player) <= 0) {
-                            Toast.makeText(context, "YOU LOSE >:)", Toast.LENGTH_SHORT).show()
-                            gameView.postDelayed({ context.finish() }, 3000)
+                            youLose()
                         }
                     }
                     Direction.BOTTOM -> {
                         if (monster.dealDamage(player) <= 0) {
-                            Toast.makeText(context, "YOU LOSE >:)", Toast.LENGTH_SHORT).show()
-                            gameView.postDelayed({ context.finish() }, 3000)
+                            youLose()
                         }
                     }
                     Direction.LEFT -> {
                         if (monster.dealDamage(player) <= 0) {
-                            Toast.makeText(context, "YOU LOSE >:)", Toast.LENGTH_SHORT).show()
-                            gameView.postDelayed({ context.finish() }, 3000)
+                            youLose()
                         }
                     }
                     Direction.RIGHT -> {
                         if (monster.dealDamage(player) <= 0) {
-                            Toast.makeText(context, "YOU LOSE >:)", Toast.LENGTH_SHORT).show()
-                            gameView.postDelayed({ context.finish() }, 3000)
+                            youLose()
                         }
                     }
                 }
@@ -277,7 +290,7 @@ class GameManager{
 
         if (isAttacking) {
             for (monster in monsterObjects) {
-                when(player.collision(monster)) {
+                when(player.collision(monster)) { //check if the player is hitting a monster
                     Direction.NONE -> {} // Do nothing
                     Direction.TOP -> {
                         if (player.dealDamage(monster) <= 0) {
@@ -308,17 +321,27 @@ class GameManager{
             player.gravity = GRAVITY
         }
 
-        for (gameObj in gameObjects) {
-            gameObj.update(movementContext)
+        for (gameObj in gameObjects) { //update all the game objects, background
+            gameObj.update(movementContext) //we also update player here but it doesn't matter because of movement context
         }
 
-        for (monster in monsterObjects) {
+        for (monster in monsterObjects) { //seperate update for all the monsters
             monster.update(movementContext)
         }
-
+        player.animate(gameView)
         // The movement of the player and the other objects of the game are inversely related
         player.update(!movementContext) // This should eventually become the specific context for characters
 
+    }
+
+    fun youWin() {
+        Toast.makeText(context, "YOU WIN!!!", Toast.LENGTH_SHORT).show()
+        gameView.postDelayed({ context.finish() }, 3000)
+    }
+
+    fun youLose() {
+        Toast.makeText(context, "YOU LOSE >:)", Toast.LENGTH_SHORT).show()
+        gameView.postDelayed({ context.finish() }, 2000)
     }
 
     fun getGameObjects(): List<GameObject> {

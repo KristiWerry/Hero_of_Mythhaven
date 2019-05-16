@@ -38,6 +38,7 @@ class Background: GameObject {
     }
 
     override fun update(context: Boolean) {
+        //changing out backgrounds
         if (bLocation1.x < 0f-screenSize.x) {
             bLocation1.x = screenSize.x
             numCompletedBackgrounds++
@@ -46,7 +47,7 @@ class Background: GameObject {
             bLocation2.x = screenSize.x
             numCompletedBackgrounds++
         }
-
+        //moving backgrounds
         if (context) {
             move(bLocation1)
             move(bLocation2)

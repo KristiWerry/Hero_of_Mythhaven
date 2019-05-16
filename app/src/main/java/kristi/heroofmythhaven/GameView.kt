@@ -14,23 +14,16 @@ class GameView: View{
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        // Fix This
-
 
         gameManager.loadGameObject()
         gameManager.update()
-        for (gameObj in gameManager.getGameObjects()) { // FIX THIS WILL YOU LAZY BUM
-//            for (gameObj in gameObjList.value) {
-                gameObj.draw(canvas)
-//            }
+        for (gameObj in gameManager.getGameObjects()) {
+            gameObj.draw(canvas)
         }
 
         for (monster in gameManager.getMonsterObjects()) {
             monster.draw(canvas)
         }
-
-
-//        this.postDelayed({invalidate()}, 10)
         invalidate()
     }
 
@@ -39,7 +32,6 @@ class GameView: View{
     }
 
     fun setLeftUserInput(leftInput: MovementUserInput) {
-        //gameManager.userInput[input] = true
         gameManager.leftUserInput = leftInput
     }
     fun setRightUserInput(rightInput: ActionUserInput) {
