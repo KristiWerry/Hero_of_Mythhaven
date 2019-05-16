@@ -28,9 +28,13 @@ class GameManager{
     var leftUserInput: MovementUserInput = MovementUserInput.NOINPUT
     private lateinit var gameView: GameView
     private var youWin = false
+    private val level: Int
+    private val playerLevel: Int
 
-    constructor(level: Int, context: LevelActivity) {
+    constructor(level: Int, context: LevelActivity, playerLevel: Int) {
         this.context = context
+        this.level = level
+        this.playerLevel = playerLevel
     }
 
     // Based on what level is inputted, go to a JSON file and grab the necessary information
@@ -57,12 +61,12 @@ class GameManager{
                 middlePoint.x = gameView.width * 0.5f - (playerFrames[0].width/2)
                 middlePoint.y = gameView.height * 0.59f
                 ground = gameView.height.toFloat() * 0.79f
-                player = Player(playerFrames, PointF(middlePoint.x - 500,middlePoint.y - 200), 5, 1)
+                player = Player(playerFrames, PointF(middlePoint.x - 500,middlePoint.y - 200), 5*playerLevel, 1)
 
                 val floor = Floor(listOf(), PointF(gameView.width.toFloat(), gameView.height.toFloat()))
 
                 loaded = true
-                val loadedLevel = LevelLoader(context, 1)
+                val loadedLevel = LevelLoader(context, level)
                 gameObjects = loadedLevel.getGameObjs()
                 monsterObjects = loadedLevel.monsterObjs
                 gameObjects.add(player)
