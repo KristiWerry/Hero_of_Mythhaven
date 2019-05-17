@@ -1,28 +1,27 @@
 package kristi.heroofmythhaven
 
 import android.graphics.*
-import android.support.v4.view.ViewCompat.animate
-import android.util.Log
 import kotlin.collections.ArrayList
 import kotlin.math.abs
 
 class Player: GameObject, CharacterAttributes{
     // Character Attributes Interface Variables
-    override var hp: Int
+    override var hp: Int //playerFrames health points
     override var damage: Int
 
-    private var player: ArrayList<Bitmap>
-    private var playerFrame = 0
+    private var playerFrames: ArrayList<Bitmap> // List of the playerFrames frames
+    private var currentFrame = 0
+    private var clock = 0 // Used as a counter to slow down the animation
     private var rightAttackBoundingBox: RectF
     private var leftAttackBoundingBox: RectF
 
+    // These are used to affect the players animation, movement, and attack
     var facingRight = true
     var isWalking = false
     var isJumping = false
     var isAttacking = false
-    private var clock = 0
 
-    // Physics interface (which game object requires implementation of
+    // Physics interface
     override var velocityY = 0f
     override var boundingBox: RectF
     override var velocityX = 0f
@@ -32,7 +31,7 @@ class Player: GameObject, CharacterAttributes{
     override var location = PointF(0f,0f)
 
     constructor(mBitmap: ArrayList<Bitmap>, startingPoint: PointF, hp: Int, damage: Int) {
-        player = mBitmap
+        playerFrames = mBitmap
         this.hp = hp
         this.damage = damage
         this.location.x = startingPoint.x
@@ -43,107 +42,105 @@ class Player: GameObject, CharacterAttributes{
     }
 
     override fun draw(canvas: Canvas) {
-        canvas.drawBitmap(player[playerFrame], this.location.x, this.location.y, null)
-//        canvas.drawRect(boundingBox, Paint(Color.RED))
+        canvas.drawBitmap(playerFrames[currentFrame], this.location.x, this.location.y, null)
     }
 
     override fun update(context: Boolean) {
-//        Log.i("HOM", "PLAYER HP: " + hp)
         if (context) {
             move(location)
         }
 
         // Update the players bounding box
         boundingBox.left = this.location.x
-        boundingBox.right = this.location.x + player[0].width
+        boundingBox.right = this.location.x + playerFrames[0].width
         boundingBox.top = this.location.y
-        boundingBox.bottom = this.location.y + player[0].height
+        boundingBox.bottom = this.location.y + playerFrames[0].height
 
         //update players attack bounding box
         leftAttackBoundingBox.left = this.location.x - 50
-        leftAttackBoundingBox.right = this.location.x + player[0].width
+        leftAttackBoundingBox.right = this.location.x + playerFrames[0].width
         leftAttackBoundingBox.top = this.location.y
-        leftAttackBoundingBox.bottom = this.location.y + player[0].height
+        leftAttackBoundingBox.bottom = this.location.y + playerFrames[0].height
 
         rightAttackBoundingBox.left = this.location.x
-        rightAttackBoundingBox.right = this.location.x + player[0].width + 50
+        rightAttackBoundingBox.right = this.location.x + playerFrames[0].width + 50
         rightAttackBoundingBox.top = this.location.y
-        rightAttackBoundingBox.bottom = this.location.y + player[0].height
+        rightAttackBoundingBox.bottom = this.location.y + playerFrames[0].height
     }
 
-    fun animate(context: GameView) {
+    fun animate() {
         if(isWalking && facingRight) { //walk right
              if(clock++ == 5){
-                 if(playerFrame == 0) {
-                     playerFrame = 1
+                 if(currentFrame == 0) {
+                     currentFrame = 1
                  }
                  else {
-                     playerFrame = 0
+                     currentFrame = 0
                  }
                  clock = 0
              }
         }
         else if(isWalking && !facingRight) { //walk left
             if(clock++ == 5){
-                if(playerFrame == 4) {
-                    playerFrame = 5
+                if(currentFrame == 4) {
+                    currentFrame = 5
                 }
                 else {
-                    playerFrame = 4
+                    currentFrame = 4
                 }
                 clock = 0
             }
         }
         else if(isJumping && facingRight) { //jumping right
             if(clock++ == 5){
-                if(playerFrame == 0) {
-                    playerFrame = 3
+                if(currentFrame == 0) {
+                    currentFrame = 3
                 }
                 else {
-                    playerFrame = 0
+                    currentFrame = 0
                 }
                 clock = 0
             }
         }
         else if(isJumping && !facingRight) { //jumping left
             if(clock++ == 5){
-                if(playerFrame == 4) {
-                    playerFrame = 7
+                if(currentFrame == 4) {
+                    currentFrame = 7
                 }
                 else {
-                    playerFrame = 4
+                    currentFrame = 4
                 }
                 clock = 0
             }
         }
         else if(isAttacking && facingRight) { //attack right
             if(clock++ == 5){
-                if(playerFrame == 0) {
-                    playerFrame = 2
+                if(currentFrame == 0) {
+                    currentFrame = 2
                 }
                 else {
-                    playerFrame = 0
+                    currentFrame = 0
                 }
                 clock = 0
             }
         }
         else if(isAttacking && !facingRight) {//attack left
             if(clock++ == 5){
-                if(playerFrame == 4) {
-                    playerFrame = 6
+                if(currentFrame == 4) {
+                    currentFrame = 6
                 }
                 else {
-                    playerFrame = 4
+                    currentFrame = 4
                 }
                 clock = 0
             }
         }
         else {
             if(facingRight){
-                playerFrame = 0
+                currentFrame = 0
             }
             else {
-                playerFrame = 4
+                currentFrame = 4
             }
         }
 
@@ -161,6 +158,7 @@ class Player: GameObject, CharacterAttributes{
         point.y -= (velocityY * (mTime) - 0.5f * gravity * mTime * mTime)
     }
 
+    // The collision for the player object is used for attacking purposes
     override fun collision(pObj: Physics): Direction{
         val bBox: RectF
 
@@ -170,7 +168,7 @@ class Player: GameObject, CharacterAttributes{
         else {
             bBox = leftAttackBoundingBox
         }
-//
+
         if (RectF.intersects(pObj.boundingBox, bBox)){
             val w = 0.5 * (bBox.width() + pObj.boundingBox.width())
             val h = 0.5 * (bBox.height() + pObj.boundingBox.height())
@@ -186,7 +184,7 @@ class Player: GameObject, CharacterAttributes{
                         return Direction.BOTTOM
                     }
                     else { // LEFT
-                        pObj.location.x += (w + dx).toFloat() + 50
+                        pObj.location.x += (w + dx).toFloat() + 50 // Push the monster back
                         pObj.location.y -= (h - dy).toFloat()
                         pObj.velocityY = -VY
                         pObj.gravity = GRAVITY
@@ -196,7 +194,7 @@ class Player: GameObject, CharacterAttributes{
                 }
                 else {
                     if (wy > -hx) { // RIGHT
-                        pObj.location.x -= (w - dx).toFloat()
+                        pObj.location.x -= (w - dx).toFloat() // Push the monster back
                         pObj.location.y -= (h - dy).toFloat()
                         pObj.velocityY = -VY
                         pObj.gravity = GRAVITY
@@ -205,7 +203,7 @@ class Player: GameObject, CharacterAttributes{
                     }
                     else {
                         pObj.location.y -= (h - dy).toFloat()
-                        if ((pObj.location.x - location.x) > 0) {
+                        if ((pObj.location.x - location.x) > 0) { // Push the monster back depending on which direction the player is facing
                             pObj.location.x += (w + dx).toFloat() + 50
                         }
                         else {
@@ -230,13 +228,5 @@ class Player: GameObject, CharacterAttributes{
     override fun dealDamage(character: CharacterAttributes): Int {
         character.hp -= damage
         return character.hp
-    }
-
-    fun getPlayerWidth(): Int{
-        return player[0].width
-    }
-
-    fun getPlayerHeight(): Int{
-        return player[0].height
     }
 }

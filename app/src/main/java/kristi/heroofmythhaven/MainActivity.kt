@@ -7,22 +7,20 @@ import android.os.Bundle
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
 
-
 class MainActivity : AppCompatActivity() {
     private var username: String = ""
-    private var level: Int = 1
+    private var level: Int = 1 //Player level
     private var gold: Int = 0
-    private val QUESTCODE = 123
+    private val QUESTCODE = 123 // Used in on activity result for when the levelactivity finishes and has sent information back
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         username = intent.getStringExtra("Username")
         playNameMain.text = username
-        val levelTitle = getString(R.string.levelTitle) + level.toString()
-        levelMain.text = levelTitle
-        val goldTitle = getString(R.string.goldTitle) + gold.toString()
-        goldMain.text = goldTitle
+        levelMain.text = String.format(getString(R.string.levelTitle) + level.toString())
+        goldMain.text = String.format(getString(R.string.goldTitle) + gold.toString())
 
         quest1.setOnClickListener {
             val startQuest1 = Intent(this, LevelActivity::class.java)
@@ -70,17 +68,14 @@ class MainActivity : AppCompatActivity() {
                 Log.i("onActivityResult", "$finalLevelResult")
                 if(finalLevelResult){
                     //we won the level so increase gold and level
-                    gold+= 2000
+                    gold += 2000
                     level++
-                    val levelTitle = getString(R.string.levelTitle) + level.toString()
-                    levelMain.text = levelTitle
-                    val goldTitle = getString(R.string.goldTitle) + gold.toString()
-                    goldMain.text = goldTitle
+                    levelMain.text = String.format(getString(R.string.levelTitle) + level.toString())
+                    goldMain.text = String.format(getString(R.string.goldTitle) + gold.toString())
                 }
             }
             Activity.RESULT_CANCELED ->
                 Log.i("onActivityResult", "cancel")
         }
     }
-
 }

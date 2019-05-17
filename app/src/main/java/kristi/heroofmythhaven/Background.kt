@@ -1,11 +1,10 @@
 package kristi.heroofmythhaven
 
 import android.graphics.*
-import android.util.Log
 import kotlin.math.abs
 
 class Background: GameObject {
-    override var location = PointF(0f,0f)
+    // Physics Interface variables
     override var velocityX: Float = VX
     override var velocityY: Float = 0f
     override var gravity: Float = 0f
@@ -13,6 +12,7 @@ class Background: GameObject {
     override var boundingBox: RectF
     override var mTime = 0f
 
+    override var location = PointF(0f,0f)
     private var background1: Bitmap
     private var bLocation1: PointF
     private var bLocation2: PointF
@@ -74,25 +74,20 @@ class Background: GameObject {
                 if (wy > hx) {
                     if (wy > -hx) {
                         pObj.velocityY = 0f// BOTTOM
-//                        Log.i("HOM","DOWNNNNNN")
                         return Direction.BOTTOM
                     }
                     else {
                         pObj.velocityX = 0F// LEFT
-//                        Log.i("HOM","LEFT")
                         return Direction.LEFT
                     }
                 }
                 else {
                     if (wy > -hx) { // RIGHT
                         pObj.location.x -= (w - dx).toFloat()
-//                        pObj.velocityX = -0.75f
-//                        Log.i("HOM", "RIGHT")
                         return Direction.RIGHT
                     }
                     else {
                         pObj.velocityY = 0f // TOP
-//                        Log.i("HOM", "UP")
                         return Direction.TOP
                     }
                 }

@@ -5,14 +5,13 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_level.*
-import kotlinx.android.synthetic.main.activity_main.*
 
+// These enums are used by the gamemanager class to dictate game play
 enum class MovementUserInput {
     LEFT,
     RIGHT,
@@ -31,14 +30,10 @@ class LevelActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_level)
-        val username = intent.getStringExtra("Username")
-        playNameLevel.text = username
-        val level = intent.getIntExtra("Level", 0)
-        val levelTitle = getString(R.string.levelTitle) + level.toString()
-        levelLevel.text = levelTitle
-        val gold = intent.getIntExtra("Gold", 0)
-        val goldTitle = getString(R.string.goldTitle) + gold.toString()
-        goldLevel.text = goldTitle
+
+        playNameLevel.text = intent.getStringExtra("Username")
+        levelLevel.text = String.format(getString(R.string.levelTitle) + intent.getIntExtra("Level", 0).toString())
+        goldLevel.text = String.format(getString(R.string.goldTitle) + intent.getIntExtra("Gold", 0).toString())
         questLevelNumber = intent.getIntExtra("QuestNumber", 1)
     }
 
@@ -77,10 +72,14 @@ class LevelActivity : AppCompatActivity() {
         }
     }
 
+    // Gets called when the pause button is pressed
     fun showPausePopup(view: View) {
+        // Create the dialog
         val dialogs = Dialog(this)
         dialogs.setCancelable(false)
         dialogs.setContentView(R.layout.pause_popup)
+
+        // Give the dialog resume and quit buttons
         val resumeBtn = dialogs.findViewById(R.id.resumeButton) as Button
         val quitBtn = dialogs.findViewById(R.id.quitButton) as TextView
         resumeBtn.setOnClickListener {
@@ -93,12 +92,14 @@ class LevelActivity : AppCompatActivity() {
             setResult(RESULT_OK, levelResult) //return the final score to main activity
             finish() //finish and go back to main activity //kills this activity //not on back stack
         }
+
         dialogs.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialogs.show()
     }
 
+    // Gets called when the player beats the level or dies
     fun showEndPopup(didWin: Boolean) {
-        var titleText: String
+        val titleText: String
         if(didWin) {
             titleText = getString(R.string.you_win)
             val levelResult = intent
@@ -111,15 +112,19 @@ class LevelActivity : AppCompatActivity() {
             levelResult.putExtra("DidWin", false)
             setResult(RESULT_OK, levelResult) //return the final score to main activity
         }
+
+        // Create the dialog
         val dialogs = Dialog(this)
         dialogs.setCancelable(false)
         dialogs.setContentView(R.layout.end_popup)
         val endTitle = dialogs.findViewById(R.id.endTitle) as TextView
         endTitle.text = titleText
+
+        // Give the dialog restart and quit buttons
         val restartBtn = dialogs.findViewById(R.id.restartButtonEnd) as Button
         val quitBtn = dialogs.findViewById(R.id.quitButtonEnd) as TextView
         restartBtn.setOnClickListener {
-            //restart game~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            //Restart the game by giving the gameView a new gameManager (in its initial state)
             dialogs.dismiss()
             gameManager = GameManager(questLevelNumber, this@LevelActivity, level)
             gameView.setGameManager(gameManager)

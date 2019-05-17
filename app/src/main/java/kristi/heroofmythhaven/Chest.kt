@@ -1,18 +1,18 @@
 package kristi.heroofmythhaven
 
 import android.graphics.*
-import android.util.Log
 import kotlin.math.abs
 
 class Chest: GameObject{
+    // Physics interface variables
     override var location: PointF
     override var velocityX: Float = VX
     override var velocityY: Float = 0f
     override var gravity: Float = 0f
     override var time: Float = TIME
     override var mTime = 0f
-
     override var boundingBox: RectF
+
     private var chest: Bitmap
 
     constructor(bitMap: Bitmap, startingPoint: PointF) {
@@ -29,6 +29,8 @@ class Chest: GameObject{
         if (context) {
             move(location)
         }
+
+        // Update the bounding box with the new location
         boundingBox.left = location.x
         boundingBox.right = location.x + chest.width
     }

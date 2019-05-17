@@ -1,9 +1,9 @@
 package kristi.heroofmythhaven
 
 import android.graphics.*
-import android.util.Log
 import kotlin.math.abs
 
+// These should be terrain objects that populate the interactable environment
 class Landing: GameObject{
     // Physics Interface
     override var velocityX: Float = VX
@@ -52,17 +52,17 @@ class Landing: GameObject{
                     if (wy > -hx) {
                         pObj.velocityY = 0f // BOTTOM
                         pObj.gravity = 0f
-                        pObj.location.y -= (h - dy).toFloat()
+                        pObj.location.y -= (h - dy).toFloat() // Make sure the input object's location is outside of the bounds of this landing
                         return Direction.BOTTOM
                     }
                     else { // LEFT
-                        pObj.location.x += (w + dx).toFloat()
+                        pObj.location.x += (w + dx).toFloat() // Make sure the input object's location is outside of the bounds of this landing
                         return Direction.LEFT
                     }
                 }
                 else {
                     if (wy > -hx) { // RIGHT
-                        pObj.location.x -= (w - dx).toFloat()
+                        pObj.location.x -= (w - dx).toFloat() // Make sure the input object's location is outside of the bounds of this landing
                         return Direction.RIGHT
                     }
                     else {

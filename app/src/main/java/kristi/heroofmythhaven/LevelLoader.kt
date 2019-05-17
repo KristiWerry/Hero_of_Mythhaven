@@ -3,15 +3,13 @@ package kristi.heroofmythhaven
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.PointF
-import android.util.Log
 import org.json.JSONObject
 
 const val BACKGROUND = "background"
 const val GAMEOBJS = "gameobjects"
 
 class LevelLoader {
-//    private val file: File
-    private val jsonObj: JSONObject
+    private val jsonObj: JSONObject // Holds all of the information extracted from the level specific json file
     private val gameObjs = mutableListOf<GameObject>()
     val monsterObjs = mutableListOf<Monster>()
     private val context: LevelActivity
@@ -41,13 +39,15 @@ class LevelLoader {
 
         // construct the remaining game objects
         val levelGameObjs = jsonObj.getJSONObject(level.toString()).getJSONArray(GAMEOBJS)
+
         for (i in 0 until levelGameObjs.length()) { // for every game object
             val gameObj = levelGameObjs.getJSONObject(i)
+            val objTypeIterator = gameObj.keys()
 
-            val iter = gameObj.keys()
-            while(iter.hasNext()) { // gets the game object type without having to know what it is ahead of time
-                val gameObjType = iter.next()
+            while(objTypeIterator.hasNext()) { // gets the game object type (key) without having to know what it is ahead of time
+                val gameObjType = objTypeIterator.next()
                 val jObj = gameObj.getJSONObject(gameObjType)
+
                 when(gameObjType) {
                     "landing" -> {
                         val bitMap = getBitMap(jObj)

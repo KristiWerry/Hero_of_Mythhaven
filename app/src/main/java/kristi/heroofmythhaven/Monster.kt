@@ -22,6 +22,7 @@ class Monster: GameObject, CharacterAttributes {
     override var damage: Int
 
     private var bitMap: Bitmap
+    var goingLeft = true
 
 
     constructor(bitMap: Bitmap, hp: Int, damage: Int, location: PointF) {
@@ -36,9 +37,7 @@ class Monster: GameObject, CharacterAttributes {
         canvas.drawBitmap(bitMap, this.location.x, this.location.y, null)
     }
 
-    var goingLeft = true
     override fun update(context: Boolean) {
-        Log.i("HOM", "SLIME HP: " + hp)
         if (context) {
             if (goingLeft) {
                 velocityX = - 2 * VX
@@ -80,7 +79,7 @@ class Monster: GameObject, CharacterAttributes {
                         return Direction.BOTTOM
                     }
                     else { // LEFT
-                        pObj.location.x += (w + dx).toFloat() + 50
+                        pObj.location.x += (w + dx).toFloat() + 50 //Push the object back
                         pObj.location.y -= (h - dy).toFloat()
                         goingLeft = true
                         velocityX = -VX
@@ -89,7 +88,7 @@ class Monster: GameObject, CharacterAttributes {
                 }
                 else {
                     if (wy > -hx) { // RIGHT
-                        pObj.location.x -= (w - dx).toFloat()
+                        pObj.location.x -= (w - dx).toFloat() //Push the object back
                         pObj.location.y -= (h - dy).toFloat()
                         goingLeft = false
                         velocityX = VX
@@ -97,7 +96,7 @@ class Monster: GameObject, CharacterAttributes {
                     }
                     else {
                         pObj.location.y -= (h - dy).toFloat()
-                        if ((pObj.location.x - location.x) > 0) {
+                        if ((pObj.location.x - location.x) > 0) { //Push the object back depending on the direction the monster is currently traveling
                             pObj.location.x += (w + dx).toFloat() + 50
                             goingLeft = true
                         }
@@ -116,7 +115,6 @@ class Monster: GameObject, CharacterAttributes {
 
     override fun move(point: PointF) {
         mTime += time
-        //Log.i("HOM", "MTIME: " + mTime)
         point.x += (velocityX * (time))
         point.y -= (velocityY * (mTime) - 0.5f * gravity * mTime * mTime)
     }
