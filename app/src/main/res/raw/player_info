@@ -1,0 +1,106 @@
+{
+  "deathknight" : [
+    {
+      "standing_right": "death_knight"
+    },
+    {
+      "walking_right": "death_knight1"
+    },
+    {
+      "attack_right": "death_knight2"
+    },
+    {
+      "jumping_right": "death_knight3"
+    },
+    {
+      "standing_left": "death_knight4"
+    },
+    {
+      "walking_left": "death_knight5"
+    },
+    {
+      "attack_left": "death_knight6"
+    },
+    {
+      "jumping_left": "death_knight7"
+    }
+  ],
+  "human" : [
+    {
+      "standing_right": "human"
+    },
+    {
+      "walking_right": "human1"
+    },
+    {
+      "attack_right": "human2"
+    },
+    {
+      "jumping_right": "human3"
+    },
+    {
+      "standing_left": "human4"
+    },
+    {
+      "walking_left": "human5"
+    },
+    {
+      "attack_left": "human6"
+    },
+    {
+      "jumping_left": "human7"
+    }
+  ],
+  "darkelf" : [
+    {
+      "standing_right": "darkelf"
+    },
+    {
+      "walking_right": "darkelf1"
+    },
+    {
+      "attack_right": "darkelf2"
+    },
+    {
+      "jumping_right": "darkelf3"
+    },
+    {
+      "standing_left": "darkelf4"
+    },
+    {
+      "walking_left": "darkelf5"
+    },
+    {
+      "attack_left": "darkelf6"
+    },
+    {
+      "jumping_left": "darkelf7"
+    }
+  ],
+  "demon" : [
+    {
+      "standing_right": "demon"
+    },
+    {
+      "walking_right": "demon1"
+    },
+    {
+      "attack_right": "demon2"
+    },
+    {
+      "jumping_right": "demon3"
+    },
+    {
+      "standing_left": "demon4"
+    },
+    {
+      "walking_left": "demon5"
+    },
+    {
+      "attack_left": "demon6"
+    },
+    {
+      "jumping_left": "demon7"
+    }
+  ]
+}

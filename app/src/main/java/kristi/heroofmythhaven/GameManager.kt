@@ -40,36 +40,15 @@ class GameManager{
     // Based on what level is inputted, go to a JSON file and grab the necessary information
     fun loadGameObject(){
             if (!loaded) {
-                playerFrames.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
-                    R.drawable.death_knight), 150, 150, false))
-                playerFrames.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
-                    R.drawable.death_knight2), 150, 150, false))
-                playerFrames.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
-                    R.drawable.death_knight3), 150, 150, false))
-                playerFrames.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
-                    R.drawable.death_knight4), 150, 150, false))
-                playerFrames.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
-                    R.drawable.death_knight_l), 150, 150, false))
-                playerFrames.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
-                    R.drawable.death_knight2_l), 150, 150, false))
-                playerFrames.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
-                    R.drawable.death_knight3_l), 150, 150, false))
-                playerFrames.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources,
-                    R.drawable.death_knight4_l), 150, 150, false))
                 gameView = context.findViewById(R.id.gameView)
-
-                middlePoint.x = gameView.width * 0.5f - (playerFrames[0].width/2)
-                middlePoint.y = gameView.height * 0.59f
                 ground = gameView.height.toFloat() * 0.79f
-                player = Player(playerFrames, PointF(middlePoint.x - 500,middlePoint.y - 200), 5*playerLevel, 1)
-
                 val floor = Floor(listOf(), PointF(gameView.width.toFloat(), gameView.height.toFloat()))
 
                 loaded = true
-                val loadedLevel = LevelLoader(context, level)
+                val loadedLevel = LevelLoader(context, level, "deathknight", 1)
+                player = loadedLevel.getPlayer()
                 gameObjects = loadedLevel.getGameObjs()
                 monsterObjects = loadedLevel.monsterObjs
-                gameObjects.add(player)
                 gameObjects.add(floor)
                 background = loadedLevel.getBackground()
                 chest = loadedLevel.getChest()
