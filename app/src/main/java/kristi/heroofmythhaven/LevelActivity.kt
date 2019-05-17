@@ -30,14 +30,10 @@ class LevelActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_level)
-        val username = intent.getStringExtra("Username")
-        playNameLevel.text = username
-        val level = intent.getIntExtra("Level", 0)
-        val levelTitle = getString(R.string.levelTitle) + level.toString()
-        levelLevel.text = levelTitle
-        val gold = intent.getIntExtra("Gold", 0)
-        val goldTitle = getString(R.string.goldTitle) + gold.toString()
-        goldLevel.text = goldTitle
+
+        playNameLevel.text = intent.getStringExtra("Username")
+        levelLevel.text = String.format(getString(R.string.levelTitle) + intent.getIntExtra("Level", 0).toString())
+        goldLevel.text = String.format(getString(R.string.goldTitle) + intent.getIntExtra("Gold", 0).toString())
         questLevelNumber = intent.getIntExtra("QuestNumber", 1)
     }
 

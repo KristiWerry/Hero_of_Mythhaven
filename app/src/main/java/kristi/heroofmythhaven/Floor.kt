@@ -1,7 +1,6 @@
 package kristi.heroofmythhaven
 
 import android.graphics.*
-import android.util.Log
 import kotlin.math.abs
 
 class Floor: GameObject {
@@ -34,30 +33,20 @@ class Floor: GameObject {
                         pObj.velocityY = 0f// BOTTOM
                         pObj.gravity = 0f
                         pObj.location.y -= (h - dy).toFloat()
-//                        Log.i("HOM","DOWNNNNNN------------------------------------------------------")
-//                        if(pObj.location.y + pObj.boundingBox.height()> boundingBox.top) { //testing to get player not to fall into ground
-//                            Log.i("HOM", "Player Location "+ (pObj.location.y + pObj.boundingBox.height()))
-//                            Log.i("HOM", "Bounding Box top"+ boundingBox.top)
-//                            Log.i("HOM", "Bounding Box height"+ boundingBox.height())
-//                            pObj.location.y = boundingBox.top - pObj.boundingBox.height()
-//                        }
                         return Direction.BOTTOM
                     }
                     else {
                         pObj.velocityX = 0f// LEFT
-//                        Log.i("HOM","LEFT")
                         return Direction.LEFT
                     }
                 }
                 else {
                     if (wy > -hx) {
                         pObj.velocityX = 0f // RIGHT
-//                        Log.i("HOM", "RIGHT")
                         return Direction.RIGHT
                     }
                     else {
                         pObj.velocityY = 0f // TOP
-//                        Log.i("HOM", "UP")
                         return Direction.TOP
                     }
                 }
@@ -70,11 +59,9 @@ class Floor: GameObject {
     override fun move(point: PointF) {
     }
 
-    override fun draw(canvas: Canvas) {
-        //canvas.drawRect(boundingBox, Paint(Color.RED))
-    }
+    // Since it does not move or get draw the floor objects draw and update have no functionality
+    // The floor does not actually have a bitmap associated with it, its bitmap is managed as part of the background
+    override fun draw(canvas: Canvas) {} // Do nothing
 
-    override fun update(context: Boolean) {
-        //Log.i("HOM", "FLOOR LOCATION: " + boundingBox.top)
-    }
+    override fun update(context: Boolean) {} // Do nothing
 }
