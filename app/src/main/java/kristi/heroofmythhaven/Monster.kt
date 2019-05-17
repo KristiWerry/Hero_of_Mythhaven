@@ -78,8 +78,7 @@ class Monster: GameObject, CharacterAttributes {
                         return Direction.BOTTOM
                     }
                     else { // LEFT
-                        pObj.location.x += (w + dx).toFloat() + 50 //Push the object back
-                        pObj.location.y -= (h - dy).toFloat()
+                        pObj.location.x += (w + dx).toFloat() + 100 //Push the object back
                         goingLeft = true
                         velocityX = -VX
                         return Direction.LEFT
@@ -87,20 +86,19 @@ class Monster: GameObject, CharacterAttributes {
                 }
                 else {
                     if (wy > -hx) { // RIGHT
-                        pObj.location.x -= (w - dx).toFloat() //Push the object back
-                        pObj.location.y -= (h - dy).toFloat()
+                        pObj.location.x -= (w - dx).toFloat() + 100 //Push the object back
                         goingLeft = false
                         velocityX = VX
                         return Direction.RIGHT
                     }
                     else {
-                        pObj.location.y -= (h - dy).toFloat()
                         if ((pObj.location.x - location.x) > 0) { //Push the object back depending on the direction the monster is currently traveling
-                            pObj.location.x += (w + dx).toFloat() + 50
+                            pObj.location.x += (w + dx).toFloat() + 100
                             goingLeft = true
                         }
                         else {
-                            pObj.location.x -= (w - dx).toFloat() + 50
+                            pObj.location.x -= (w - dx).toFloat() + 100
+                            pObj.location.y -= (h - dy).toFloat() // Make sure the input object's location is outside of the bounds of this landing
                             goingLeft = false
                         }
                         return Direction.TOP

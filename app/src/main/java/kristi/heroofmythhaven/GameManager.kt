@@ -330,6 +330,7 @@ class GameManager{
     }
 
     private fun lose() {
+        context.updateHP(player.hp)
         context.showEndPopup(false)
     }
 

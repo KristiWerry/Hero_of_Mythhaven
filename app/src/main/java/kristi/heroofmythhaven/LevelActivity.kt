@@ -25,16 +25,17 @@ enum class ActionUserInput {
 
 class LevelActivity : AppCompatActivity() {
     private var level = 0
-    private var userCharacter: String = "human"
+    private var playerType: String = "human"
     private lateinit var gameManager: GameManager
     private var questLevelNumber: Int = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_level)
 
         playNameLevel.text = intent.getStringExtra("Username")
         level = intent.getIntExtra("Level", 0)
-        userCharacter = intent.getStringExtra("Character")
+        playerType = intent.getStringExtra("Character")
         levelLevel.text = String.format(getString(R.string.levelTitle) + intent.getIntExtra("Level", 0).toString())
         goldLevel.text = String.format(getString(R.string.goldTitle) + intent.getIntExtra("Gold", 0).toString())
         questLevelNumber = intent.getIntExtra("QuestNumber", 1)
@@ -42,7 +43,7 @@ class LevelActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        gameManager = GameManager(questLevelNumber, this@LevelActivity, level, userCharacter)
+        gameManager = GameManager(questLevelNumber, this@LevelActivity, level, playerType)
         gameView.setGameManager(gameManager)
 
         leftButton.setOnTouchListener {_, motionEvent ->
@@ -139,7 +140,7 @@ class LevelActivity : AppCompatActivity() {
         restartBtn.setOnClickListener {
             //Restart the game by giving the gameView a new gameManager (in its initial state)
             dialogs.dismiss()
-            gameManager = GameManager(questLevelNumber, this@LevelActivity, level, "deathknight")
+            gameManager = GameManager(questLevelNumber, this@LevelActivity, level, playerType)
             gameView.setGameManager(gameManager)
         }
         quitBtn.setOnClickListener {

@@ -20,6 +20,8 @@ interface Physics {
     var boundingBox: RectF
     var location: PointF
 
+    // Collision detection in most classes is accomplished by calculating the diagonal between the two objects, then based
+    // On that information the direction of collision and amount of object overlap is known
     fun collision(pObj: Physics): Direction
     fun move(point: PointF)
 }

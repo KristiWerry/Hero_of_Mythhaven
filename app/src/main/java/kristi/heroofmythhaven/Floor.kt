@@ -1,6 +1,7 @@
 package kristi.heroofmythhaven
 
 import android.graphics.*
+import android.util.Log
 import kotlin.math.abs
 
 class Floor: GameObject {
@@ -14,6 +15,8 @@ class Floor: GameObject {
 
     constructor(mBitmaps: List<Bitmap>, screenSize: PointF) {
         location = PointF(0f, screenSize.y * 0.79f)
+
+        // We have to make the floor huge or else the monsters will fall as soon as they are loaded into the game
         boundingBox = RectF(-300f, screenSize.y * 0.79f, screenSize.x + 10000f, screenSize.y + 300f)
     }
 
@@ -42,7 +45,15 @@ class Floor: GameObject {
                 }
                 else {
                     if (wy > -hx) {
+                        // Since the floor needs to be huge in order to accomodate for loading monsters into the game
+                        // The diagonal calculation for player collisions with the floor after jumping from a landing
+                        // Actually registers the collision direction as a right collision, hence why these variables are
+                        // set here
                         pObj.velocityX = 0f // RIGHT
+                        pObj.velocityY = 0f// BOTTOM
+                        pObj.gravity = 0f
+                        pObj.mTime = 0f
+                        pObj.location.y -= (h - dy).toFloat()
                         return Direction.RIGHT
                     }
                     else {
