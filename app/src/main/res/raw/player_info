@@ -53,54 +53,54 @@
   ],
   "darkelf" : [
     {
-      "standing_right": "darkelf"
+      "standing_right": "dark_elf"
     },
     {
-      "walking_right": "darkelf1"
+      "walking_right": "dark_elf1"
     },
     {
-      "attack_right": "darkelf2"
+      "attack_right": "dark_elf2"
     },
     {
-      "jumping_right": "darkelf3"
+      "jumping_right": "dark_elf3"
     },
     {
-      "standing_left": "darkelf4"
+      "standing_left": "dark_elf4"
     },
     {
-      "walking_left": "darkelf5"
+      "walking_left": "dark_elf5"
     },
     {
-      "attack_left": "darkelf6"
+      "attack_left": "dark_elf6"
     },
     {
-      "jumping_left": "darkelf7"
+      "jumping_left": "dark_elf7"
     }
   ],
   "demon" : [
     {
-      "standing_right": "demon"
+      "standing_right": "demon_spawn"
     },
     {
-      "walking_right": "demon1"
+      "walking_right": "demon_spawn1"
     },
     {
-      "attack_right": "demon2"
+      "attack_right": "demon_spawn2"
     },
     {
-      "jumping_right": "demon3"
+      "jumping_right": "demon_spawn3"
     },
     {
-      "standing_left": "demon4"
+      "standing_left": "demon_spawn4"
     },
     {
-      "walking_left": "demon5"
+      "walking_left": "demon_spawn5"
     },
     {
-      "attack_left": "demon6"
+      "attack_left": "demon_spawn6"
     },
     {
-      "jumping_left": "demon7"
+      "jumping_left": "demon_spawn7"
     }
   ]
 }

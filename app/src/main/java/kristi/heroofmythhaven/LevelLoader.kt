@@ -11,7 +11,7 @@ const val GAMEOBJS = "gameobjects"
 
 class LevelLoader {
     private val gameObjs = mutableListOf<GameObject>()
-    val monsterObjs = mutableListOf<Monster>()
+    private val monsterObjs = mutableListOf<Monster>()
     private val context: LevelActivity
     private val background: Background
     private val player: Player
@@ -32,15 +32,15 @@ class LevelLoader {
         }
         levelJsonObj = JSONObject(jsonString)
 
-        // construct the player
-        player = constructPlayer(playerType, playerLevel)
-        gameObjs.add(player)
-
         // construct the background
         val bgRes = context.resources.getIdentifier(levelJsonObj.getJSONObject(level.toString()).getString(BACKGROUND), "drawable", context.packageName)
         val backgroundBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources, bgRes), gameView.width+5, gameView.height, false)
         background = Background(listOf<Bitmap>(backgroundBitmap,backgroundBitmap), PointF(gameView.width.toFloat(), gameView.height.toFloat()))
         gameObjs.add(background)
+
+        // construct the player
+        player = constructPlayer(playerType, playerLevel)
+        gameObjs.add(player)
 
         // construct the remaining game objects
         val levelGameObjs = levelJsonObj.getJSONObject(level.toString()).getJSONArray(GAMEOBJS)
@@ -82,6 +82,10 @@ class LevelLoader {
 
     fun getGameObjs(): MutableList<GameObject> {
         return gameObjs
+    }
+
+    fun getMonsterObjs(): MutableList<Monster> {
+        return monsterObjs
     }
 
     fun getPlayer(): Player {

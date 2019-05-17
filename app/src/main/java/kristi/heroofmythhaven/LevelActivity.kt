@@ -39,7 +39,7 @@ class LevelActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        gameManager = GameManager(questLevelNumber, this@LevelActivity, level)
+        gameManager = GameManager(questLevelNumber, this@LevelActivity, level, "deathknight")
         gameView.setGameManager(gameManager)
 
         leftButton.setOnTouchListener {_, motionEvent ->
@@ -79,10 +79,14 @@ class LevelActivity : AppCompatActivity() {
         dialogs.setCancelable(false)
         dialogs.setContentView(R.layout.pause_popup)
 
+        // Pause the game
+        gameManager.pause()
+
         // Give the dialog resume and quit buttons
         val resumeBtn = dialogs.findViewById(R.id.resumeButton) as Button
         val quitBtn = dialogs.findViewById(R.id.quitButton) as TextView
         resumeBtn.setOnClickListener {
+            gameManager.resume()
             dialogs.dismiss()
         }
         quitBtn.setOnClickListener {
@@ -126,7 +130,7 @@ class LevelActivity : AppCompatActivity() {
         restartBtn.setOnClickListener {
             //Restart the game by giving the gameView a new gameManager (in its initial state)
             dialogs.dismiss()
-            gameManager = GameManager(questLevelNumber, this@LevelActivity, level)
+            gameManager = GameManager(questLevelNumber, this@LevelActivity, level, "deathknight")
             gameView.setGameManager(gameManager)
         }
         quitBtn.setOnClickListener {

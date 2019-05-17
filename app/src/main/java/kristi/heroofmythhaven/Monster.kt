@@ -57,6 +57,7 @@ class Monster: GameObject, CharacterAttributes {
 
         move(location)
 
+
         boundingBox.left = this.location.x
         boundingBox.right = this.location.x + bitMap.width
         boundingBox.top = this.location.y
