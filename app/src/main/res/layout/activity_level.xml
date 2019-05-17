@@ -49,7 +49,14 @@
         <RelativeLayout android:layout_width="match_parent"
                       android:orientation="vertical"
                       android:layout_height="match_parent">
-            <!--android:background="@drawable/button_background"-->
+            <TextView android:layout_width="match_parent"
+                      android:id="@+id/hp"
+                      android:layout_margin="30dp"
+                      android:textColor="@color/whiteText"
+                      android:textSize="25sp"
+                      android:textStyle="bold"
+                      android:text="hp"
+                      android:layout_height="100dp"/>
             <LinearLayout android:layout_width="fill_parent"
                           android:orientation="horizontal"
                           android:layout_alignParentBottom="true"

@@ -112,7 +112,6 @@ class LevelLoader {
         val playerFrames = playerJsonObj.getJSONArray(playerType)
         val temp = arrayListOf("standing_right", "walking_right", "attack_right", "jumping_right", "standing_left", "walking_left", "attack_left", "jumping_left")
         for (i in 0 until playerFrames.length()) {
-            Log.i("HOM", "FRAME: " + playerFrames.getJSONObject(i).getString(temp[i]))
             val frame = playerFrames.getJSONObject(i).getString(temp[i])
             val frameRes = context.resources.getIdentifier(frame, "drawable", context.packageName)
             playerFrameList.add(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.resources, frameRes), 150, 150, false))

@@ -25,6 +25,7 @@ enum class ActionUserInput {
 
 class LevelActivity : AppCompatActivity() {
     private var level = 0
+    private var userCharacter: String = "human"
     private lateinit var gameManager: GameManager
     private var questLevelNumber: Int = 1
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +33,8 @@ class LevelActivity : AppCompatActivity() {
         setContentView(R.layout.activity_level)
 
         playNameLevel.text = intent.getStringExtra("Username")
+        level = intent.getIntExtra("Level", 0)
+        userCharacter = intent.getStringExtra("Character")
         levelLevel.text = String.format(getString(R.string.levelTitle) + intent.getIntExtra("Level", 0).toString())
         goldLevel.text = String.format(getString(R.string.goldTitle) + intent.getIntExtra("Gold", 0).toString())
         questLevelNumber = intent.getIntExtra("QuestNumber", 1)
@@ -39,7 +42,7 @@ class LevelActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        gameManager = GameManager(questLevelNumber, this@LevelActivity, level, "deathknight")
+        gameManager = GameManager(questLevelNumber, this@LevelActivity, level, userCharacter)
         gameView.setGameManager(gameManager)
 
         leftButton.setOnTouchListener {_, motionEvent ->
@@ -70,6 +73,10 @@ class LevelActivity : AppCompatActivity() {
             }
             true
         }
+    }
+
+    fun updateHP(hitpoints: Int) {
+        hp.text = "HP: " + hitpoints.toString()
     }
 
     // Gets called when the pause button is pressed
@@ -116,6 +123,8 @@ class LevelActivity : AppCompatActivity() {
             levelResult.putExtra("DidWin", false)
             setResult(RESULT_OK, levelResult) //return the final score to main activity
         }
+
+        gameManager.pause()
 
         // Create the dialog
         val dialogs = Dialog(this)

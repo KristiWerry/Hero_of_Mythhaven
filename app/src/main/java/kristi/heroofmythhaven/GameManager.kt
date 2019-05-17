@@ -3,6 +3,7 @@ package kristi.heroofmythhaven
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.PointF
+import android.util.Log
 
 // These constants are used as a standard by all game objects for physics operations
 const val TIME = 0.25f
@@ -57,6 +58,7 @@ class GameManager{
 
     fun update() {
         if (!isPaused) { // Should not do anything if the game is paused
+            context.updateHP(player.hp)
             var movementContext =
                 false // Determines if the background and game objects can move or if the player can move
             // Their relation ship is inversely related
@@ -281,22 +283,23 @@ class GameManager{
                         } // Do nothing
                         Direction.TOP -> {
                             if (player.dealDamage(monster) <= 0) {
-                                monsterObjects.remove(monster) // Delete the reference to the monster object if it defeated
+                                monster.delete(context) // Delete the reference to the monster object if it defeated
                             }
                         }
                         Direction.BOTTOM -> {
                             if (player.dealDamage(monster) <= 0) {
-                                monsterObjects.remove(monster)
+                                monster.delete(context)
                             }
                         }
                         Direction.LEFT -> {
                             if (player.dealDamage(monster) <= 0) {
-                                monsterObjects.remove(monster)
+                                monster.delete(context)
                             }
+
                         }
                         Direction.RIGHT -> {
                             if (player.dealDamage(monster) <= 0) {
-                                monsterObjects.remove(monster)
+                                monster.delete(context)
                             }
                         }
                     }
@@ -315,6 +318,7 @@ class GameManager{
             for (monster in monsterObjects) { //separate update for all the monsters
                 monster.update(movementContext)
             }
+
             player.animate()
             // The movement of the player and the other objects of the game are inversely related
             player.update(!movementContext) // This should eventually become the specific context for characters

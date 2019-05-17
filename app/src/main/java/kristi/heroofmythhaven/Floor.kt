@@ -14,7 +14,7 @@ class Floor: GameObject {
 
     constructor(mBitmaps: List<Bitmap>, screenSize: PointF) {
         location = PointF(0f, screenSize.y * 0.79f)
-        boundingBox = RectF(-300f, screenSize.y * 0.79f, screenSize.x, screenSize.y + 300f)
+        boundingBox = RectF(-300f, screenSize.y * 0.79f, screenSize.x + 10000f, screenSize.y + 300f)
     }
 
     override fun collision(pObj: Physics): Direction {

@@ -3,7 +3,9 @@ package kristi.heroofmythhaven
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
+import kotlinx.android.synthetic.main.activity_level.view.*
 
 class GameView: View{
     private lateinit var gameManager: GameManager
@@ -24,6 +26,7 @@ class GameView: View{
         for (monster in gameManager.getMonsterObjects()) {
             monster.draw(canvas)
         }
+
         invalidate()
     }
 

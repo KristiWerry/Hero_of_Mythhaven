@@ -184,34 +184,22 @@ class Player: GameObject, CharacterAttributes{
                         return Direction.BOTTOM
                     }
                     else { // LEFT
-                        pObj.location.x += (w + dx).toFloat() + 50 // Push the monster back
-                        pObj.location.y -= (h - dy).toFloat()
-                        pObj.velocityY = -VY
-                        pObj.gravity = GRAVITY
-                        pObj.mTime = 0f
+                        pObj.location.x += (w + dx).toFloat() + 100 // Push the monster back
                         return Direction.LEFT
                     }
                 }
                 else {
                     if (wy > -hx) { // RIGHT
                         pObj.location.x -= (w - dx).toFloat() // Push the monster back
-                        pObj.location.y -= (h - dy).toFloat()
-                        pObj.velocityY = -VY
-                        pObj.gravity = GRAVITY
-                        pObj.mTime = 0f
                         return Direction.RIGHT
                     }
                     else {
-                        pObj.location.y -= (h - dy).toFloat()
                         if ((pObj.location.x - location.x) > 0) { // Push the monster back depending on which direction the player is facing
-                            pObj.location.x += (w + dx).toFloat() + 50
+                            pObj.location.x += (w + dx).toFloat() + 100
                         }
                         else {
-                            pObj.location.x -= (w - dx).toFloat() + 50
+                            pObj.location.x -= (w - dx).toFloat() + 100
                         }
-                        pObj.velocityY = -VY
-                        pObj.gravity = GRAVITY
-                        pObj.mTime = 0f
                         return Direction.TOP
                     }
 

@@ -12,6 +12,7 @@ class MainActivity : AppCompatActivity() {
     private var level: Int = 1 //Player level
     private var gold: Int = 0
     private val QUESTCODE = 123 // Used in on activity result for when the levelactivity finishes and has sent information back
+    private var userCharacter: String = "human"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
             startQuest1.putExtra("Username", username)
             startQuest1.putExtra("Level", level)
             startQuest1.putExtra("Gold", gold)
+            startQuest1.putExtra("Character", userCharacter)
             startQuest1.putExtra("QuestNumber", 1)
             startActivityForResult(startQuest1, QUESTCODE)
         }
@@ -35,6 +37,7 @@ class MainActivity : AppCompatActivity() {
             startQuest2.putExtra("Username", username)
             startQuest2.putExtra("Level", level)
             startQuest2.putExtra("Gold", gold)
+            startQuest2.putExtra("Character", userCharacter)
             startQuest2.putExtra("QuestNumber", 2)
             startActivityForResult(startQuest2, QUESTCODE)
         }
@@ -43,18 +46,37 @@ class MainActivity : AppCompatActivity() {
             startQuest3.putExtra("Username", username)
             startQuest3.putExtra("Level", level)
             startQuest3.putExtra("Gold", gold)
+            startQuest3.putExtra("Character", userCharacter)
             startQuest3.putExtra("QuestNumber", 3)
             startActivityForResult(startQuest3, QUESTCODE)
         }
-        quest4.setOnClickListener {
-            val startQuest4 = Intent(this, LevelActivity::class.java)
-            startQuest4.putExtra("Username", username)
-            startQuest4.putExtra("Level", level)
-            startQuest4.putExtra("Gold", gold)
-            startQuest4.putExtra("QuestNumber", 4)
-            startActivityForResult(startQuest4, QUESTCODE)
-        }
+        changeCharacter.setOnClickListener{
+            if(userCharacter == "human") {
+                userCharacter = "deathknight"
+                characterPhoto.setImageResource(R.drawable.death_knight)
+            }
+            else if (userCharacter == "deathknight") {
+                userCharacter = "darkelf"
+                characterPhoto.setImageResource(R.drawable.dark_elf)
 
+            }
+            else if (userCharacter == "darkelf") {
+                userCharacter = "demon"
+                characterPhoto.setImageResource(R.drawable.demon_spawn)
+
+            }
+            else if(userCharacter == "demon"){
+                userCharacter = "human"
+                characterPhoto.setImageResource(R.drawable.human)
+
+            }
+            else {
+                userCharacter = "human"
+                characterPhoto.setImageResource(R.drawable.human)
+                //do nothing
+            }
+
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

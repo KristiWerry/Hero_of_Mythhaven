@@ -1,9 +1,7 @@
 package kristi.heroofmythhaven
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.PointF
-import android.graphics.RectF
+import android.content.Context
+import android.graphics.*
 import android.util.Log
 import kotlin.math.abs
 
@@ -115,13 +113,18 @@ class Monster: GameObject, CharacterAttributes {
     }
 
     override fun move(point: PointF) {
-        mTime += time
         point.x += (velocityX * (time))
-        point.y -= (velocityY * (mTime) - 0.5f * gravity * mTime * mTime)
     }
 
     override fun dealDamage(character: CharacterAttributes): Int {
         character.hp -= damage
         return character.hp
+    }
+
+    fun delete(context: Context) {
+        boundingBox = RectF(0f,0f,0f,0f)
+        location.x = 0f
+        location.y = 0f
+        bitMap = Bitmap.createBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.empty))
     }
 }

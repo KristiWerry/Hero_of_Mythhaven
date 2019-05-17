@@ -14,4 +14,8 @@
     <string name="restart">Restart</string>
     <string name="you_lose">You Lose</string>
     <string name="you_win">You Win!!</string>
+    <string name="quest_3">Quest 3</string>
+    <string name="quest_2">Quest 2</string>
+    <string name="quest_1">Quest 1</string>
+    <string name="change_character">Change Character</string>
 </resources>
