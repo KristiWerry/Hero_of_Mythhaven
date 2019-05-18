@@ -64,8 +64,17 @@ class LevelLoader {
                         gameObjs.add(chest)
                     }
                     "monster" -> {
+                        val monsterFrameList = ArrayList<Bitmap>()
                         val bitMap = getBitMap(jObj)
-                        monsterObjs.add(Monster(bitMap, jObj.getInt("hp"), jObj.getInt("damage"), PointF(jObj.getInt("x").toFloat(), (gameView.height.toFloat() * 0.79f) - (bitMap.height * jObj.getInt("y").toFloat()))))
+                        val frame1 = jObj.getString("filename")
+                        val frame2 = jObj.getString("filename1")
+                        Log.i("HOM", "HERE")
+                        val frameRes1 = context.resources.getIdentifier(frame1, "drawable", context.packageName)
+                        val frameRes2 = context.resources.getIdentifier(frame2, "drawable", context.packageName)
+                        monsterFrameList.add( BitmapFactory.decodeResource(context.resources, frameRes1))
+                        monsterFrameList.add( BitmapFactory.decodeResource(context.resources, frameRes2))
+
+                        monsterObjs.add(Monster(monsterFrameList, jObj.getInt("hp"), jObj.getInt("damage"), PointF(jObj.getInt("x").toFloat(), (gameView.height.toFloat() * 0.79f) - (bitMap.height * jObj.getInt("y").toFloat()))))
                     }
                 }
             }

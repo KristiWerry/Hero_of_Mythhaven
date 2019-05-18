@@ -1,9 +1,6 @@
 package kristi.heroofmythhaven
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.PointF
-import android.util.Log
 
 // These constants are used as a standard by all game objects for physics operations
 const val TIME = 0.25f

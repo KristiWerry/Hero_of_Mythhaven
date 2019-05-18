@@ -18,21 +18,23 @@ class Monster: GameObject, CharacterAttributes {
     // CharacterAttribute interface variables
     override var hp: Int
     override var damage: Int
+    override var animationFrames: ArrayList<Bitmap> // List of the playerFrames frames
+    override var currentFrame = 0
+    override var clock = 0 // Used as a counter to slow down the animation
 
-    private var bitMap: Bitmap
     var goingLeft = true
 
 
-    constructor(bitMap: Bitmap, hp: Int, damage: Int, location: PointF) {
+    constructor(bitMap: ArrayList<Bitmap>, hp: Int, damage: Int, location: PointF) {
         this.hp = hp
         this.damage = damage
-        this.bitMap = bitMap
+        animationFrames = bitMap
         this.location = location
-        boundingBox = RectF(location.x, location.y, location.x + bitMap.width, location.y + bitMap.height)
+        boundingBox = RectF(location.x, location.y, location.x + animationFrames[0].width, location.y + animationFrames[0].height)
     }
 
     override fun draw(canvas: Canvas) {
-        canvas.drawBitmap(bitMap, this.location.x, this.location.y, null)
+        canvas.drawBitmap(animationFrames[currentFrame], this.location.x, this.location.y, null)
     }
 
     override fun update(context: Boolean) {
@@ -52,14 +54,23 @@ class Monster: GameObject, CharacterAttributes {
                 velocityX = VX
             }
         }
+        if(clock++ == 5){
+            if(currentFrame == 0) {
+                currentFrame = 1
+            }
+            else {
+                currentFrame = 0
+            }
+            clock = 0
+        }
 
         move(location)
 
 
         boundingBox.left = this.location.x
-        boundingBox.right = this.location.x + bitMap.width
+        boundingBox.right = this.location.x + animationFrames[0].width
         boundingBox.top = this.location.y
-        boundingBox.bottom = this.location.y + bitMap.height
+        boundingBox.bottom = this.location.y + animationFrames[0].height
     }
 
     override fun collision(pObj: Physics): Direction {
@@ -123,6 +134,7 @@ class Monster: GameObject, CharacterAttributes {
         boundingBox = RectF(0f,0f,0f,0f)
         location.x = 0f
         location.y = 0f
-        bitMap = Bitmap.createBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.empty))
+        animationFrames[0] = Bitmap.createBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.empty))
+        animationFrames[1] = Bitmap.createBitmap(BitmapFactory.decodeResource(context.resources, R.drawable.empty))
     }
 }

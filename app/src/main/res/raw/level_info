@@ -16,7 +16,8 @@
                 "hp":"1",
                 "damage": "1",
                 "movement": "move1",
-                "filename": "slime_blue"
+                "filename": "slime_blue",
+                "filename1": "slime_blue1"
              }
         },
         {
@@ -26,7 +27,8 @@
                 "hp":"1",
                 "damage": "1",
                 "movement": "move1",
-                "filename": "slime_blue"
+                "filename": "slime_blue",
+                "filename1": "slime_blue1"
              }
         },
         {
@@ -237,7 +239,8 @@
                     "hp":"1",
                     "damage": "1",
                     "movement": "move1",
-                    "filename": "skeleton"
+                    "filename": "skeleton",
+                    "filename1": "skeleton1"
                  }
           },
           {
@@ -247,7 +250,8 @@
                   "hp":"1",
                   "damage": "1",
                   "movement": "move1",
-                  "filename": "skeleton"
+                  "filename": "skeleton",
+                  "filename1": "skeleton1"
                }
           },
           {
@@ -257,7 +261,8 @@
                   "hp":"1",
                   "damage": "1",
                   "movement": "move1",
-                  "filename": "skeleton"
+                  "filename": "skeleton",
+                  "filename1": "skeleton1"
                }
           },
           {
@@ -267,7 +272,8 @@
                 "hp":"2",
                 "damage": "1",
                 "movement": "move1",
-                "filename": "imp"
+                "filename": "imp",
+                "filename1": "imp1"
              }
           },
           {
@@ -326,7 +332,8 @@
                   "hp":"2",
                   "damage": "2",
                   "movement": "move1",
-                  "filename": "white_imp"
+                  "filename": "white_imp",
+                  "filename1": "white_imp1"
                }
           },
           {
@@ -385,7 +392,8 @@
                     "hp":"2",
                     "damage": "1",
                     "movement": "move1",
-                    "filename": "imp"
+                    "filename": "imp",
+                    "filename1": "imp1"
                  }
           },
           {
@@ -395,7 +403,8 @@
                     "hp":"1",
                     "damage": "1",
                     "movement": "move1",
-                    "filename": "skeleton"
+                    "filename": "skeleton",
+                    "filename1": "skeleton1"
                  }
           },
           {
@@ -405,7 +414,8 @@
                     "hp":"1",
                     "damage": "1",
                     "movement": "move1",
-                    "filename": "skeleton"
+                    "filename": "skeleton",
+                    "filename1": "skeleton1"
                  }
           },
           {
@@ -415,7 +425,8 @@
                     "hp":"1",
                     "damage": "1",
                     "movement": "move1",
-                    "filename": "skeleton"
+                    "filename": "skeleton",
+                    "filename1": "skeleton1"
                  }
           },
           {
@@ -425,7 +436,8 @@
                   "hp":"10",
                   "damage": "10",
                   "movement": "move1",
-                  "filename": "vanpire"
+                  "filename": "vanpire",
+                  "filename1": "vanpire1"
                }
           },
           {
@@ -456,7 +468,8 @@
                   "hp":"2",
                   "damage": "1",
                   "movement": "move1",
-                  "filename": "imp"
+                  "filename": "imp",
+                  "filename1": "imp1"
                }
           },
           {
@@ -466,7 +479,8 @@
                   "hp":"1",
                   "damage": "1",
                   "movement": "move1",
-                  "filename": "skeleton"
+                  "filename": "skeleton",
+                  "filename1": "skeleton1"
                }
           },
           {
@@ -476,7 +490,8 @@
                     "hp":"2",
                     "damage": "2",
                     "movement": "move1",
-                    "filename": "white_imp"
+                    "filename": "white_imp",
+                    "filename1": "white_imp1"
                  }
           },
           {
@@ -568,7 +583,8 @@
                     "hp":"1",
                     "damage": "1",
                     "movement": "move1",
-                    "filename": "slime_blue"
+                    "filename": "slime_blue",
+                    "filename1": "slime_blue1"
                  }
             },
             {
@@ -578,7 +594,8 @@
                     "hp":"1",
                     "damage": "1",
                     "movement": "move1",
-                    "filename": "skeleton"
+                    "filename": "skeleton",
+                    "filename1": "skeleton1"
                  }
             },
             {
@@ -588,7 +605,8 @@
                     "hp":"2",
                     "damage": "1",
                     "movement": "move1",
-                    "filename": "imp"
+                    "filename": "imp",
+                    "filename1": "imp1"
                  }
             },
             {
@@ -598,7 +616,8 @@
                     "hp":"2",
                     "damage": "2",
                     "movement": "move1",
-                    "filename": "white_imp"
+                    "filename": "white_imp",
+                    "filename1": "white_imp1"
                  }
             },
             {
@@ -608,7 +627,8 @@
                     "hp":"10",
                     "damage": "10",
                     "movement": "move1",
-                    "filename": "vanpire"
+                    "filename": "vanpire",
+                    "filename1": "vanpire1"
                  }
             },
             {
@@ -618,7 +638,8 @@
                     "hp":"15",
                     "damage": "2",
                     "movement": "move1",
-                    "filename": "clay_golem"
+                    "filename": "clay_golem",
+                    "filename1": "clay_golem1"
                  }
             },
             {
@@ -628,7 +649,8 @@
                     "hp":"20",
                     "damage": "5",
                     "movement": "move1",
-                    "filename": "guardian_golem"
+                    "filename": "guardian_golem",
+                    "filename1": "guardian_golem1"
                  }
             },
             {
@@ -638,7 +660,8 @@
                     "hp":"4",
                     "damage": "1",
                     "movement": "move1",
-                    "filename": "spriggan"
+                    "filename": "spriggan",
+                    "filename1": "spriggan1"
                  }
             },
             {
@@ -648,7 +671,8 @@
                     "hp":"15",
                     "damage": "5",
                     "movement": "move1",
-                    "filename": "treant"
+                    "filename": "treant",
+                    "filename1": "treant1"
                  }
             },
             {
@@ -658,7 +682,8 @@
                     "hp":"30",
                     "damage": "15",
                     "movement": "move1",
-                    "filename": "boss"
+                    "filename": "boss",
+                    "filename1": "boss1"
                  }
             },
             {

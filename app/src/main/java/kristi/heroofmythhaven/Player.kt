@@ -8,10 +8,10 @@ class Player: GameObject, CharacterAttributes{
     // Character Attributes Interface Variables
     override var hp: Int //playerFrames health points
     override var damage: Int
+    override var animationFrames: ArrayList<Bitmap> // List of the player's animation frames
+    override var currentFrame = 0
+    override var clock = 0 // Used as a counter to slow down the animation
 
-    private var playerFrames: ArrayList<Bitmap> // List of the playerFrames frames
-    private var currentFrame = 0
-    private var clock = 0 // Used as a counter to slow down the animation
     private var rightAttackBoundingBox: RectF
     private var leftAttackBoundingBox: RectF
 
@@ -31,7 +31,7 @@ class Player: GameObject, CharacterAttributes{
     override var location = PointF(0f,0f)
 
     constructor(mBitmap: ArrayList<Bitmap>, startingPoint: PointF, hp: Int, damage: Int) {
-        playerFrames = mBitmap
+        animationFrames = mBitmap
         this.hp = hp
         this.damage = damage
         this.location.x = startingPoint.x
@@ -42,7 +42,7 @@ class Player: GameObject, CharacterAttributes{
     }
 
     override fun draw(canvas: Canvas) {
-        canvas.drawBitmap(playerFrames[currentFrame], this.location.x, this.location.y, null)
+        canvas.drawBitmap(animationFrames[currentFrame], this.location.x, this.location.y, null)
     }
 
     override fun update(context: Boolean) {
@@ -52,20 +52,20 @@ class Player: GameObject, CharacterAttributes{
 
         // Update the players bounding box
         boundingBox.left = this.location.x
-        boundingBox.right = this.location.x + playerFrames[0].width
+        boundingBox.right = this.location.x + animationFrames[0].width
         boundingBox.top = this.location.y
-        boundingBox.bottom = this.location.y + playerFrames[0].height
+        boundingBox.bottom = this.location.y + animationFrames[0].height
 
         //update players attack bounding box
         leftAttackBoundingBox.left = this.location.x - 50
-        leftAttackBoundingBox.right = this.location.x + playerFrames[0].width
+        leftAttackBoundingBox.right = this.location.x + animationFrames[0].width
         leftAttackBoundingBox.top = this.location.y
-        leftAttackBoundingBox.bottom = this.location.y + playerFrames[0].height
+        leftAttackBoundingBox.bottom = this.location.y + animationFrames[0].height
 
         rightAttackBoundingBox.left = this.location.x
-        rightAttackBoundingBox.right = this.location.x + playerFrames[0].width + 50
+        rightAttackBoundingBox.right = this.location.x + animationFrames[0].width + 50
         rightAttackBoundingBox.top = this.location.y
-        rightAttackBoundingBox.bottom = this.location.y + playerFrames[0].height
+        rightAttackBoundingBox.bottom = this.location.y + animationFrames[0].height
     }
 
     fun animate() {

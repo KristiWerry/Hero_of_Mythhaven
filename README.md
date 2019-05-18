@@ -6,20 +6,22 @@ Kristi Werry 823386935
 Github: https://github.com/Writchie19/Hero_of_Mythhaven.git
 
 Description:  This is a 2D side scrolling android rpg game. Embark on quests, defeat monsters, acquire gold, and level up.
-Use gold to unlock cool new character skins. Can you beat the final level? (Every level is win-able).
+Use gold to unlock cool new character skins. Can you beat the final level?
+Notes:
+    - Every level is win-able by touching the treasure chest at the end of the quest.
+    - Buttons are: Move Left, Move Right, Attack, and Jump.
 
 There are no special instructions required to run the game.  The game will be locked in landscape orientation. No 3rd party libraries are 
 needed. 
 
 List of known issues:
  - We could not finish every thing we wanted:
-	- Did not save the character or game state when the app is closed
+	- Did not save the character or game state when the app is closed or is onPause state
 	- Did not implement Monster AI
 	- Did not implement projectiles
-	- Did not implement actual use of gold to purchase character skins
 	- Did not implement moving obstacles
-	- Did not implement moving monster animation
 	- Did not implement an HP bar, instead its a number
+
  - Known Bugs:
 	- Under certain circumstances you instantly die from monsters if you fall on top of them
 	- Sometimes when colliding with terrain you "phase" which for a brief time looks like their are multiples of the character, but this usually sorts itself out
