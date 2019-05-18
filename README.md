@@ -5,8 +5,8 @@ Kristi Werry 823386935
 
 Github: https://github.com/Writchie19/Hero_of_Mythhaven.git
 
-Description:  This is a 2D side scrolling android rpg game. Embark on quests, defeat monsters, aquire gold, and level up.
-Use gold to unlock cool new character skins. Can you beat the final level?
+Description:  This is a 2D side scrolling android rpg game. Embark on quests, defeat monsters, acquire gold, and level up.
+Use gold to unlock cool new character skins. Can you beat the final level? (Every level is win-able).
 
 There are no special instructions required to run the game.  The game will be locked in landscape orientation. No 3rd party libraries are 
 needed. 
@@ -26,5 +26,5 @@ List of known issues:
 
  - Final comments:
 	- We spent a surprising amount of time handling game bugs, which took away from development time of other features
-	- We attempted to write well designed code but we ran out of time and favored functionality over well written code (sorry but youre going to see alot of booleans)
+	- We attempted to write well designed code but we ran out of time and favored functionality over well written code (sorry but you're going to see a lot of booleans)
 	- Given a few more days we would have likely finished the remaining features and definitely refactored our code 

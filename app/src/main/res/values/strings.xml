@@ -18,4 +18,6 @@
     <string name="quest_2">Quest 2</string>
     <string name="quest_1">Quest 1</string>
     <string name="change_character">Change Character</string>
+    <string name="buy_character">Buy Character</string>
+    <string name="_2_000_gold">2,000 gold</string>
 </resources>
